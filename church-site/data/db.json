@@ -188,5 +188,21 @@
       "actif": true,
       "createdAt": "2026-07-05T08:00:00.000Z"
     }
+  ],
+  "citations": [
+    {
+      "id": "c1",
+      "texte": "Je suis la lumière du monde. Celui qui me suit ne marchera pas dans les ténèbres, mais il aura la lumière de la vie.",
+      "reference": "Évangile selon saint Jean, 8, 12",
+      "publie": true,
+      "createdAt": "2026-07-15T08:00:00.000Z"
+    },
+    {
+      "id": "c2",
+      "texte": "La prière est la respiration de l'âme.",
+      "reference": "Saint Augustin",
+      "publie": true,
+      "createdAt": "2026-07-10T08:00:00.000Z"
+    }
   ]
 }
