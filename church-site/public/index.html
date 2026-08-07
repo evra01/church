@@ -155,6 +155,17 @@ section{padding:84px 0;}
 .light{background:var(--marian);}
 .tint{background:var(--marian-dark);}
 
+/* CITATIONS LITURGIQUES */
+.citation-band{padding:56px 0;}
+.citation-track{position:relative; min-height:120px; display:flex; align-items:center; justify-content:center; text-align:center;}
+.citation-item{display:none; max-width:760px; margin:0 auto; animation:citFade 0.9s ease;}
+.citation-item.active{display:block;}
+.citation-item::before{content:"“"; display:block; font-family:'Fraunces',serif; font-size:56px; line-height:1; color:var(--gold); margin-bottom:6px;}
+.citation-item p.txt{font-family:'Fraunces',serif; font-size:clamp(19px,2.4vw,26px); font-weight:500; font-style:italic; color:#fff; line-height:1.4;}
+.citation-item p.ref{margin-top:16px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); font-weight:600;}
+@keyframes citFade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+@media (prefers-reduced-motion: reduce){ .citation-item{animation:none;} }
+
 /* ACTION GRID */
 .action-grid{display:grid; grid-template-columns:repeat(6, 1fr); grid-template-rows:repeat(2,180px); gap:16px;}
 .action-card{border-radius:16px; padding:22px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; color:#fff; grid-column:span 2;}
@@ -338,6 +349,14 @@ footer .brand-text span{color:var(--gold);}
       <div class="mini-row"><span>Messe du dimanche</span><b id="ciergeMesse">10h00</b></div>
       <div class="mini-row"><span>Confessions</span><b id="ciergeConfessions">Sam. 16h–17h30</b></div>
       <div class="mini-row"><span>Permanence secrétariat</span><b id="ciergePermanence">Lun–Ven 9h–12h</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="tint citation-band" id="citations">
+  <div class="wrap">
+    <div class="citation-track" id="citationsTrack">
+      <p class="empty-note">Chargement…</p>
     </div>
   </div>
 </section>
@@ -948,6 +967,39 @@ async function loadGalerie() {
   }
 }
 loadGalerie();
+
+// ============ Citations liturgiques ============
+async function loadCitations() {
+  const track = document.getElementById('citationsTrack');
+  if (!track) return;
+  try {
+    const res = await fetch('/api/citations');
+    const citations = await res.json();
+    if (!citations.length) {
+      track.closest('.citation-band')?.remove();
+      return;
+    }
+    track.innerHTML = citations.map((c, i) => `
+      <div class="citation-item ${i === 0 ? 'active' : ''}">
+        <p class="txt">${escapeHtml(c.texte)}</p>
+        ${c.reference ? `<p class="ref">${escapeHtml(c.reference)}</p>` : ''}
+      </div>
+    `).join('');
+
+    if (citations.length > 1) {
+      const items = track.querySelectorAll('.citation-item');
+      let current = 0;
+      setInterval(() => {
+        items[current].classList.remove('active');
+        current = (current + 1) % items.length;
+        items[current].classList.add('active');
+      }, 8000);
+    }
+  } catch (err) {
+    track.closest('.citation-band')?.remove();
+  }
+}
+loadCitations();
 
 // ============ Visionneuse (lightbox) ============
 const lightbox = document.getElementById('lightbox');
