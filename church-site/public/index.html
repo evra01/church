@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quasi-Paroisse Sainte Famille de Nazareth — Paris Village, Bingerville</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="brand">
+      <img src="images/logo.jpg" alt="Logo de la paroisse" class="logo-img">
+      <div class="brand-text"><b id="navNom" style="font-weight:700;">Sainte Famille de Nazareth</b><span id="navSousTitre">Paris Village · Bingerville</span></div>
+    </div>
+    <div class="navlinks">
+      <a href="#accueil">Accueil</a>
+      <a href="#messes">Messes</a>
+      <a href="#dons">Cotisation</a>
+      <a href="#celebrations">Célébrations</a>
+      <a href="#groupes">Groupes</a>
+      <a href="#articles">Articles</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#dons" class="nav-cta">Faire un don</a>
+  </nav>
+</header>
+
+<section class="hero" id="accueil">
+  <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+  <div class="hero-overlay" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="liturgie-badge" id="liturgieBadge"><span class="dot"></span><span id="liturgieBadgeText">Temps ordinaire</span></div>
+      <div class="eyebrow">Bienvenue chez vous</div>
+      <h1 id="heroTitre">Vivez votre foi, <em id="heroTitreAccent">où que vous soyez</em></h1>
+      <p class="lead" id="heroTexte">Informations paroissiales, demandes de messe et cotisation en ligne : la Quasi-Paroisse Sainte Famille de Nazareth reste proche de vous, même à distance.</p>
+      <div class="hero-actions">
+        <a href="#messes" class="btn btn-gold">Demander une messe</a>
+        <a href="#dons" class="btn btn-outline">Faire un don</a>
+      </div>
+      <div class="hero-stats" id="heroStats">
+        <div><b>3</b><span>Messes chaque semaine</span></div>
+        <div><b>12</b><span>Groupes &amp; mouvements</span></div>
+        <div><b>1948</b><span>Année de fondation</span></div>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <h3>Cierge du jour</h3>
+      <p class="sub">Une intention allumée pour la communauté</p>
+      <div class="candle-row">
+        <div class="flame"></div><div class="flame"></div><div class="flame"></div><div class="flame"></div><div class="flame"></div>
+      </div>
+      <div class="mini-row"><span>Messe du dimanche</span><b id="ciergeMesse">10h00</b></div>
+      <div class="mini-row"><span>Confessions</span><b id="ciergeConfessions">Sam. 16h–17h30</b></div>
+      <div class="mini-row"><span>Permanence secrétariat</span><b id="ciergePermanence">Lun–Ven 9h–12h</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="light">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Ce que vous pouvez faire ici</div>
+      <h2>Toute la paroisse, à portée de main</h2>
+      <p>Que vous soyez présent au village ou loin de la paroisse, restez relié à la vie de la communauté.</p>
+    </div>
+    <div class="action-grid">
+      <div class="action-card wide ac-1">
+        <div class="ac-glyph">✝</div>
+        <div><h4>Demande de messe</h4><p>Faites célébrer une intention, même à distance</p></div>
+        <a href="#messes" class="go">Demander →</a>
+      </div>
+      <div class="action-card ac-2">
+        <div class="ac-glyph">♥</div>
+        <div><h4>Don &amp; cotisation</h4><p>Soutenez la paroisse en ligne</p></div>
+        <a href="#dons" class="go">Contribuer →</a>
+      </div>
+      <div class="action-card ac-3">
+        <div class="ac-glyph">✎</div>
+        <div><h4>Articles &amp; homélies</h4><p>Lectures et réflexions</p></div>
+        <a href="#articles" class="go">Lire →</a>
+      </div>
+      <div class="action-card wide ac-4">
+        <div class="ac-glyph">🕯</div>
+        <div><h4>Sacrements</h4><p id="acSacrements">Baptême, mariage, funérailles</p></div>
+        <a href="#contact" class="go">Se renseigner →</a>
+      </div>
+      <div class="action-card ac-5">
+        <div class="ac-glyph">✉</div>
+        <div><h4>Nous contacter</h4><p>Une question, une visite</p></div>
+        <a href="#contact" class="go">Écrire →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tint">
+  <div class="wrap split">
+    <div>
+      <div class="section-head" style="margin-bottom:20px;">
+        <div class="eyebrow">Horaires</div>
+        <h2>Les célébrations de la semaine</h2>
+      </div>
+      <div class="schedule-list" id="scheduleList">
+        <div class="schedule-row"><div><div class="day">Dimanche</div><div class="detail">Messe principale</div></div><div class="time">10h00</div></div>
+        <div class="schedule-row"><div><div class="day">Mercredi</div><div class="detail">Messe en semaine</div></div><div class="time">18h30</div></div>
+        <div class="schedule-row"><div><div class="day">Vendredi</div><div class="detail">Adoration &amp; messe</div></div><div class="time">17h00</div></div>
+        <div class="schedule-row"><div><div class="day">Samedi</div><div class="detail">Confessions</div></div><div class="time">16h–17h30</div></div>
+      </div>
+    </div>
+    <div class="info-panel">
+      <h3>Informations pratiques</h3>
+      <ul id="infoPratiques">
+        <li><span class="ic">📍</span><span id="infoAdresse">Paris Village, Bingerville — Quasi-Paroisse Sainte Famille de Nazareth</span></li>
+        <li><span class="ic">☎</span><span id="infoTelephone">À compléter — secrétariat lundi à vendredi</span></li>
+        <li><span class="ic">✉</span><span id="infoEmail">contact@sainte-famille-bingerville.org</span></li>
+        <li><span class="ic">🅿</span><span id="infoParking">Parking disponible sur le site paroissial</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="light" id="messes">
+  <div class="wrap split">
+    <div class="section-head" style="max-width:100%;">
+      <div class="eyebrow">À distance</div>
+      <h2>Demander une messe</h2>
+      <p>Indiquez votre intention (action de grâce, défunt, guérison...) et la date souhaitée. Le secrétariat confirme votre demande par e-mail.</p>
+      <div class="form-card" style="margin-top:24px;">
+        <form id="massForm">
+          <div class="row-2">
+            <div class="field"><label for="mNom">Nom complet</label><input id="mNom" required placeholder="Votre nom"></div>
+            <div class="field"><label for="mEmail">E-mail</label><input id="mEmail" type="email" required placeholder="vous@exemple.com"></div>
+          </div>
+          <div class="row-2">
+            <div class="field"><label for="mDate">Date souhaitée</label><input id="mDate" type="date" required></div>
+            <div class="field"><label for="mType">Type d'intention</label>
+              <select id="mType">
+                <option>Action de grâce</option>
+                <option>Pour un défunt</option>
+                <option>Guérison / santé</option>
+                <option>Anniversaire de mariage</option>
+                <option>Autre intention</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label for="mNote">Intention détaillée</label><textarea id="mNote" placeholder="Ex : pour le repos de l'âme de..."></textarea></div>
+          <button type="submit" class="submit-btn" id="massSubmitBtn">Envoyer la demande</button>
+          <div class="confirm-msg" id="massConfirm">✓ Votre demande a bien été enregistrée. Le secrétariat vous confirmera la date par e-mail.</div>
+          <div class="error-msg" id="massError"></div>
+        </form>
+      </div>
+    </div>
+    <div>
+      <div class="info-panel">
+        <h3>Comment ça marche</h3>
+        <ul>
+          <li><span class="ic">1</span><span>Vous soumettez votre intention en ligne</span></li>
+          <li><span class="ic">2</span><span>Le secrétariat vérifie les disponibilités</span></li>
+          <li><span class="ic">3</span><span>Confirmation envoyée par e-mail sous 48h</span></li>
+          <li><span class="ic">4</span><span>Votre intention est annoncée à la messe choisie</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tint" id="dons">
+  <div class="wrap split">
+    <div>
+      <div class="section-head" style="max-width:100%;">
+        <div class="eyebrow">Cotisation &amp; dons</div>
+        <h2>Soutenir la paroisse</h2>
+        <p>Votre contribution finance l'entretien de l'église, les activités paroissiales et l'aide aux plus démunis.</p>
+      </div>
+      <div class="form-card">
+        <h3 id="donFormTitle">Choisissez un montant</h3>
+        <p class="sub" id="donFormSub">Tous les dons sont sécurisés</p>
+        <div class="freq-toggle">
+          <button type="button" class="freq-btn active" data-freq="once">Don ponctuel</button>
+          <button type="button" class="freq-btn" data-freq="monthly">Cotisation mensuelle</button>
+          <button type="button" class="freq-btn" data-freq="construction">Construction</button>
+        </div>
+        <div class="amounts" id="amountsGrid"></div>
+        <div class="field"><label for="dNom">Nom complet</label><input id="dNom" placeholder="Votre nom" required></div>
+        <div class="field"><label for="dEmail">E-mail</label><input id="dEmail" type="email" placeholder="vous@exemple.com" required></div>
+        <button class="submit-btn" id="donateBtn" type="button">Faire un don</button>
+        <div class="confirm-msg" id="donConfirm">✓ Merci pour votre générosité. La paroisse vous contactera si besoin.</div>
+        <div class="error-msg" id="donError"></div>
+      </div>
+    </div>
+    <div class="donate-side" id="donateSide"></div>
+  </div>
+</section>
+
+<section class="tint" id="celebrations">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">En images</div>
+      <h2>Les célébrations de la paroisse</h2>
+      <p>Quelques instants partagés en communauté : messes, fêtes et événements paroissiaux.</p>
+    </div>
+    <div class="gallery-grid" id="galerieGrid">
+      <p class="empty-note">Chargement des photos…</p>
+    </div>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Fermer">✕</button>
+  <figure>
+    <img id="lightboxImg" src="" alt="">
+    <figcaption id="lightboxCaption"></figcaption>
+  </figure>
+</div>
+
+<section class="light" id="groupes">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">S'engager</div>
+      <h2>Groupes &amp; mouvements de la paroisse</h2>
+      <p>Chorale, catéchèse, jeunes, équipes de service... trouvez votre place dans la communauté.</p>
+    </div>
+    <div class="groupes-grid" id="groupesGrid">
+      <p class="empty-note">Chargement des groupes…</p>
+    </div>
+  </div>
+</section>
+
+<section class="tint" id="articles">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">À lire</div>
+      <h2>Articles &amp; homélies récentes</h2>
+      <p>Réflexions, annonces et vie de la communauté.</p>
+    </div>
+    <div class="articles-grid" id="articlesGrid">
+      <p class="empty-note">Chargement des articles…</p>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap foot-grid">
+    <div>
+      <div class="brand" style="margin-bottom:14px;">
+        <img src="images/logo.jpg" alt="Logo de la paroisse" class="logo-img">
+        <div class="brand-text"><b id="footerNom" style="font-weight:700;">Sainte Famille de Nazareth</b><span id="footerSousTitre">Paris Village · Bingerville</span></div>
+      </div>
+      <p style="font-size:13.5px; max-width:32ch; color:rgba(246,239,227,0.65);" id="footerTagline">Une paroisse accueillante, proche de vous en présence comme à distance.</p>
+    </div>
+    <div>
+      <h5>Navigation</h5>
+      <ul><li><a href="#accueil">Accueil</a></li><li><a href="#messes">Messes</a></li><li><a href="#dons">Cotisation</a></li><li><a href="#celebrations">Célébrations</a></li><li><a href="#groupes">Groupes</a></li><li><a href="#articles">Articles</a></li></ul>
+    </div>
+    <div>
+      <h5>Sacrements</h5>
+      <ul id="footerSacrements"><li>Baptême</li><li>Mariage</li><li>Confirmation</li><li>Funérailles</li></ul>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <ul id="footerContact"><li>Paris Village, Bingerville</li><li>À compléter</li><li>contact@sainte-famille-bingerville.org</li></ul>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span id="footerCopyright">© 2026 Quasi-Paroisse Sainte Famille de Nazareth — Bingerville</span>
+    <a href="admin.html" style="opacity:.7;">Espace administrateur</a>
+  </div>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>
