@@ -495,6 +495,7 @@ tbody tr:hover{background:rgba(199,154,60,0.05);}
       <button data-panel="messes">🕯 Demandes de messe <span class="badge" id="badgeMesses">0</span></button>
       <button data-panel="dons">♥ Dons &amp; cotisations</button>
       <button data-panel="articles">✎ Articles</button>
+      <button data-panel="citations">🕊 Citations liturgiques</button>
       <button data-panel="groupes">👥 Groupes de service</button>
       <button data-panel="photos">🖼 Photos</button>
       <button data-panel="settings">⚙ Paramètres</button>
@@ -694,6 +695,33 @@ tbody tr:hover{background:rgba(199,154,60,0.05);}
       <div class="article-row-list" id="articlesList"></div>
     </section>
 
+    <!-- CITATIONS LITURGIQUES -->
+    <section class="panel" id="panel-citations">
+      <div class="main-head">
+        <div><h2>Citations liturgiques</h2><p>Versets bibliques, paroles de saints ou du pape, affichés sur le site public</p></div>
+      </div>
+      <div class="article-admin-head">
+        <span></span>
+        <button class="btn-primary" id="newCitationBtn">+ Nouvelle citation</button>
+      </div>
+
+      <div class="article-editor" id="citationEditor">
+        <h3 id="citationEditorTitle">Nouvelle citation</h3>
+        <input type="hidden" id="citId">
+        <div class="field"><label for="citTexte">Texte de la citation</label><textarea id="citTexte" style="min-height:100px;" placeholder="Ex : Je suis la lumière du monde…"></textarea></div>
+        <div class="field"><label for="citReference">Référence / auteur</label><input id="citReference" placeholder="Ex : Jean 8, 12 — ou — Saint Augustin"></div>
+        <div class="field">
+          <label><input type="checkbox" id="citPublie" checked style="width:auto; margin-right:8px;">Publiée sur le site</label>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-primary" id="saveCitationBtn">Enregistrer</button>
+          <button class="btn-secondary" id="cancelCitationBtn">Annuler</button>
+        </div>
+      </div>
+
+      <div class="article-row-list" id="citationsList"></div>
+    </section>
+
     <!-- GROUPES DE SERVICE -->
     <section class="panel" id="panel-groupes">
       <div class="main-head">
@@ -878,7 +906,7 @@ document.querySelectorAll('.side-nav button').forEach(btn => {
 
 // ============ Chargement des données ============
 async function loadEverything() {
-  await Promise.all([loadStats(), loadMesses(), loadDons(), loadArticles(), loadGroupes(), loadSiteSettings(), loadHeroPhotosAdmin(), loadGaleriePhotosAdmin()]);
+  await Promise.all([loadStats(), loadMesses(), loadDons(), loadArticles(), loadCitations(), loadGroupes(), loadSiteSettings(), loadHeroPhotosAdmin(), loadGaleriePhotosAdmin()]);
 }
 
 async function loadStats() {
@@ -1079,6 +1107,85 @@ document.getElementById('saveArticleBtn').addEventListener('click', async () => 
     }
     editor.classList.remove('show');
     loadArticles(); loadStats();
+  } catch (e) {
+    toast('Erreur : ' + e.message);
+  }
+});
+
+// ============ Citations liturgiques ============
+async function loadCitations() {
+  const citations = await api('/api/admin/citations');
+  const list = document.getElementById('citationsList');
+  if (!citations.length) {
+    list.innerHTML = `<p class="empty-note">Aucune citation. Créez-en une avec le bouton ci-dessus.</p>`;
+    return;
+  }
+  list.innerHTML = citations.map(c => `
+    <div class="article-admin-item">
+      <div class="swatch gold"></div>
+      <div class="info">
+        <h4>${escapeHtml(c.texte.length > 70 ? c.texte.slice(0, 70) + '…' : c.texte)}</h4>
+        <div class="meta">${escapeHtml(c.reference || 'Sans référence')} · ${formatDate(c.createdAt)}
+          <span class="pill ${c.publie ? 'pub' : 'draft'}" style="margin-left:8px;">${c.publie ? 'Publiée' : 'Brouillon'}</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="icon-btn" data-edit-cit="${c.id}">Modifier</button>
+        <button class="icon-btn" data-del-cit="${c.id}">Supprimer</button>
+      </div>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('[data-edit-cit]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const citation = citations.find(c => c.id === btn.dataset.editCit);
+      openCitationEditor(citation);
+    });
+  });
+  list.querySelectorAll('[data-del-cit]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Supprimer cette citation ?')) return;
+      await api(`/api/admin/citations/${btn.dataset.delCit}`, { method: 'DELETE' });
+      toast('Citation supprimée');
+      loadCitations();
+    });
+  });
+}
+
+const citationEditor = document.getElementById('citationEditor');
+function openCitationEditor(citation) {
+  document.getElementById('citationEditorTitle').textContent = citation ? 'Modifier la citation' : 'Nouvelle citation';
+  document.getElementById('citId').value = citation ? citation.id : '';
+  document.getElementById('citTexte').value = citation ? citation.texte : '';
+  document.getElementById('citReference').value = citation ? citation.reference : '';
+  document.getElementById('citPublie').checked = citation ? citation.publie : true;
+  citationEditor.classList.add('show');
+  citationEditor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+document.getElementById('newCitationBtn').addEventListener('click', () => openCitationEditor(null));
+document.getElementById('cancelCitationBtn').addEventListener('click', () => citationEditor.classList.remove('show'));
+
+document.getElementById('saveCitationBtn').addEventListener('click', async () => {
+  const id = document.getElementById('citId').value;
+  const payload = {
+    texte: document.getElementById('citTexte').value,
+    reference: document.getElementById('citReference').value,
+    publie: document.getElementById('citPublie').checked
+  };
+  if (!payload.texte) {
+    toast('Le texte de la citation est obligatoire');
+    return;
+  }
+  try {
+    if (id) {
+      await api(`/api/admin/citations/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+      toast('Citation mise à jour');
+    } else {
+      await api('/api/admin/citations', { method: 'POST', body: JSON.stringify(payload) });
+      toast('Citation publiée');
+    }
+    citationEditor.classList.remove('show');
+    loadCitations();
   } catch (e) {
     toast('Erreur : ' + e.message);
   }
