@@ -454,6 +454,59 @@ app.delete('/api/admin/articles/:id', requireAuth, (req, res) => {
 });
 
 // =====================================================================
+// CITATIONS LITURGIQUES
+// =====================================================================
+app.get('/api/citations', (req, res) => {
+  const db = readDB();
+  res.json((db.citations || []).filter(c => c.publie).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+});
+
+app.get('/api/admin/citations', requireAuth, (req, res) => {
+  const db = readDB();
+  res.json((db.citations || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+});
+
+app.post('/api/admin/citations', requireAuth, (req, res) => {
+  const { texte, reference, publie } = req.body || {};
+  if (!texte) {
+    return res.status(400).json({ error: 'Le texte de la citation est requis' });
+  }
+  const db = readDB();
+  if (!db.citations) db.citations = [];
+  const citation = {
+    id: uid('c'),
+    texte,
+    reference: reference || '',
+    publie: publie !== false,
+    createdAt: new Date().toISOString()
+  };
+  db.citations.unshift(citation);
+  writeDB(db);
+  res.status(201).json(citation);
+});
+
+app.put('/api/admin/citations/:id', requireAuth, (req, res) => {
+  const db = readDB();
+  const item = (db.citations || []).find(c => c.id === req.params.id);
+  if (!item) return res.status(404).json({ error: 'Citation introuvable' });
+  const { texte, reference, publie } = req.body || {};
+  if (texte !== undefined) item.texte = texte;
+  if (reference !== undefined) item.reference = reference;
+  if (publie !== undefined) item.publie = !!publie;
+  writeDB(db);
+  res.json(item);
+});
+
+app.delete('/api/admin/citations/:id', requireAuth, (req, res) => {
+  const db = readDB();
+  const before = (db.citations || []).length;
+  db.citations = (db.citations || []).filter(c => c.id !== req.params.id);
+  if (db.citations.length === before) return res.status(404).json({ error: 'Citation introuvable' });
+  writeDB(db);
+  res.json({ ok: true });
+});
+
+// =====================================================================
 // GROUPES DE SERVICE (mouvements, chorale, catéchèse, jeunes...)
 // =====================================================================
 app.get('/api/groupes', (req, res) => {
