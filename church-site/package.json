@@ -1,0 +1,20 @@
+{
+  "name": "paroisse-saint-joseph",
+  "version": "2.0.0",
+  "description": "Site web de la Paroisse Saint-Joseph avec demandes de messe, dons et administration",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "multer": "^2.2.0",
+    "pg": "^8.11.5",
+    "sharp": "^0.33.4"
+  }
+}
