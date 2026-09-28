@@ -449,6 +449,23 @@ footer .brand-text span{color:var(--gold);}
 @keyframes floatY{0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);}}
 @keyframes swayY{0%,100%{rotate:y -9deg;} 50%{rotate:y 9deg;}}
 @media (max-width:900px){ .hero-object, .hero-reflection{width:38vw; max-width:170px;} .hero-reflection{margin-bottom:-60px;} .hero-visual{min-height:230px;} }
+
+/* ===== ZONES DE SAISIE : animations réduites + boutons statiques ===== */
+.form-card, .form-card *{ animation:none !important; }
+.form-card{ opacity:1 !important; transform:none !important; transition:none !important; }
+.form-card .field input, .form-card .field select, .form-card .field textarea{ transition:border-color .2s ease, background-color .2s ease; }
+.form-card .field input:focus, .form-card .field select:focus, .form-card .field textarea:focus{ transform:none; box-shadow:none; }
+.form-card .btn, .form-card .submit-btn, .form-card .amt-btn, .form-card .freq-btn,
+.form-card .btn:hover, .form-card .submit-btn:hover, .form-card .amt-btn:hover, .form-card .freq-btn:hover,
+.form-card .btn:active, .form-card .submit-btn:active, .form-card .amt-btn:active, .form-card .freq-btn:active{
+  transform:none !important; translate:none !important; transition:none !important; box-shadow:none !important;
+}
+.form-card .btn::before, .form-card .btn::after,
+.form-card .submit-btn::before, .form-card .submit-btn::after,
+.form-card .amt-btn::before, .form-card .amt-btn::after,
+.form-card .freq-btn::before, .form-card .freq-btn::after{ content:none !important; display:none !important; }
+.form-card .pay-card, .form-card .pay-card:hover{ transform:none !important; transition:none !important; }
+#cursorGlow.hide{ opacity:0 !important; }
 </style>
 </head>
 <body>
@@ -592,10 +609,12 @@ footer .brand-text span{color:var(--gold);}
 
 <section class="light" id="messes">
   <div class="wrap split">
-    <div class="section-head" style="max-width:100%;">
+    <div>
+      <div class="section-head" style="max-width:100%;">
       <div class="eyebrow">À distance</div>
       <h2>Demander une messe</h2>
       <p>Indiquez votre intention (action de grâce, défunt, guérison...) et la date souhaitée. Le secrétariat confirme votre demande par e-mail.</p>
+      </div>
       <div class="form-card" style="margin-top:24px;">
         <form id="massForm">
           <div class="row-2">
@@ -1559,7 +1578,7 @@ if (lightbox) {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const TILT_SELECTOR = '.action-card, .article-card, .groupe-card, .gallery-item, .info-panel, .donate-side, .hero-foot-item';
-  const REVEAL_SELECTOR = '.section-head, .action-card, .schedule-row, .info-panel, .form-card, .donate-side, .impact-row, .article-card, .groupe-card, .gallery-item, .hero-foot-item';
+  const REVEAL_SELECTOR = '.section-head, .action-card, .schedule-row, .info-panel, .donate-side, .impact-row, .article-card, .groupe-card, .gallery-item, .hero-foot-item';
 
   // --- Parallax 3D du hero (fond photo/dégradé + croix), au survol de la souris ---
   const heroSection = document.querySelector('.hero');
@@ -1656,6 +1675,7 @@ if (lightbox) {
   window.reveal3dScan = function reveal3dScan() {
     document.querySelectorAll(REVEAL_SELECTOR).forEach((el, i) => {
       if (el.dataset.reveal3d) return;
+      if (el.closest('.form-card')) return;
       el.dataset.reveal3d = '1';
       el.classList.add('reveal-3d');
       el.style.transitionDelay = Math.min(i % 6, 5) * 70 + 'ms';
@@ -1711,8 +1731,11 @@ if (lightbox) {
     document.body.appendChild(s);
     s.addEventListener('animationend', () => s.remove());
   }
+  const inForm = (e) => !!(e.target.closest && e.target.closest('.form-card'));
   addEventListener('pointermove', (e) => {
-    tx = e.clientX; ty = e.clientY; glow.classList.add('on');
+    tx = e.clientX; ty = e.clientY;
+    if (inForm(e)) { glow.classList.add('hide'); return; }
+    glow.classList.remove('hide'); glow.classList.add('on');
     const now = performance.now();
     if (now - lastSpark > 45) { lastSpark = now; spark(e.clientX, e.clientY); }
     // Halo qui suit le curseur à l'intérieur des cartes
@@ -1723,6 +1746,7 @@ if (lightbox) {
 
   // Onde dorée au clic / au toucher + gerbe d'étincelles
   addEventListener('pointerdown', (e) => {
+    if (inForm(e)) return;
     const r = document.createElement('div');
     r.className = 'ripple'; r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px';
     document.body.appendChild(r);
@@ -1734,6 +1758,7 @@ if (lightbox) {
   if (matchMedia('(hover: hover)').matches) {
     document.addEventListener('mousemove', (e) => {
       document.querySelectorAll('.btn, .nav-cta, .submit-btn').forEach((b) => {
+        if (b.closest('.form-card')) { b.style.translate = ''; return; }
         const r = b.getBoundingClientRect();
         const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
         const near = Math.hypot(dx, dy) < Math.max(r.width, 120);
