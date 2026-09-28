@@ -86,20 +86,24 @@ nav.wrap{display:flex; align-items:center; justify-content:space-between; height
 .brand .mark{width:34px; height:34px; border-radius:50%; background:var(--wine); display:flex; align-items:center; justify-content:center; color:var(--gold); font-family:'Fraunces',serif; font-size:18px;}
 .logo-img{width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); flex-shrink:0;}
 footer .logo-img{border-color:var(--gold);}
-.brand-text{font-family:'Fraunces', serif; font-weight:700; font-size:19px; color:#fff;}
-.brand-text span{display:block; font-family:'Work Sans'; font-weight:500; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-top:1px;}
-.navlinks{display:flex; gap:34px; font-size:14.5px; font-weight:500; color:rgba(246,239,227,0.85);}
-.navlinks a{opacity:.82; transition:opacity .15s;}
+.brand-text{font-family:'Fraunces', serif; font-weight:700; font-size:18px; color:#fff; letter-spacing:.01em;}
+.brand-text span{display:block; font-family:'Work Sans'; font-weight:500; font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-top:2px;}
+.navlinks{display:flex; gap:30px; font-size:12.5px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:rgba(246,239,227,0.78);}
+.navlinks a{opacity:.85; transition:opacity .15s;}
 .navlinks a:hover{opacity:1;}
-.nav-cta{background:var(--wine); color:#fff; padding:10px 20px; border-radius:999px; font-size:14px; font-weight:600;}
+.nav-cta{background:var(--gold); color:var(--wine-dark); padding:11px 22px; border-radius:999px; font-size:12.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;}
 
 /* HERO */
 .hero{background: radial-gradient(circle at 82% 18%, var(--bg-glow) 0%, var(--marian) 45%, var(--marian-dark) 100%); color:var(--cream); padding:76px 0 92px; min-height:600px; display:flex; align-items:center; position:relative; overflow:hidden;}
 .hero::before{content:""; position:absolute; inset:0; background-image:repeating-linear-gradient(115deg, rgba(199,154,60,0.08) 0px, rgba(199,154,60,0.08) 2px, transparent 2px, transparent 46px); pointer-events:none; z-index:1;}
-.hero-bg{position:absolute; inset:0; z-index:0; overflow:hidden;}
-.hero-bg img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 38%; opacity:0; transform:scale(1); filter:saturate(1.06) contrast(1.02); transition:opacity 1.8s ease; will-change:opacity, transform;}
-.hero-bg img.active{opacity:1; animation:heroKenBurns 16s ease-out forwards;}
-@keyframes heroKenBurns{from{transform:scale(1);} to{transform:scale(1.08);}}
+.hero-bg{position:absolute; inset:0; z-index:0; overflow:hidden; transition:transform .5s cubic-bezier(.2,.8,.3,1); transform:perspective(1600px) scale(1.05); will-change:transform;}
+.hero-bg img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 38%; opacity:0; transform:perspective(1200px) scale(1); filter:saturate(1.06) contrast(1.02); transition:opacity 1.8s ease; will-change:opacity, transform;}
+.hero-bg img.active{opacity:1; animation:heroKenBurns 18s ease-in-out infinite alternate;}
+@keyframes heroKenBurns{
+  0%{transform:perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1);}
+  50%{transform:perspective(1200px) rotateX(1.4deg) rotateY(-2deg) scale(1.06);}
+  100%{transform:perspective(1200px) rotateX(-0.8deg) rotateY(1.6deg) scale(1.1);}
+}
 .hero-overlay{position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(20,38,71,0.86) 0%, rgba(27,45,79,0.9) 55%, var(--marian-dark) 100%);}
 /* Quand une vraie photo est chargée (voir site.js), l'overlay s'allège
    et devient directionnel pour que l'image reste nette et bien visible
@@ -116,34 +120,45 @@ footer .logo-img{border-color:var(--gold);}
       linear-gradient(180deg, rgba(14,26,50,0.55) 0%, rgba(16,29,55,0.82) 45%, rgba(15,26,48,0.94) 100%);
   }
 }
-.hero-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:center; position:relative; z-index:2;}
+.hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:32px; align-items:center; position:relative; z-index:2;}
 .eyebrow{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:18px;}
 .eyebrow::before{content:""; width:22px; height:1px; background:var(--gold);}
-.hero h1{font-size:clamp(36px, 5vw, 56px); line-height:1.06; color:#fff;}
+.hero h1{font-size:clamp(38px, 5.2vw, 60px); line-height:1.04; color:#fff;}
 .hero h1 em{font-style:normal; color:var(--gold);}
-.hero p.lead{margin-top:20px; font-size:17px; color:rgba(246,239,227,0.86); max-width:46ch;}
+.hero p.lead{margin-top:20px; font-size:16.5px; color:rgba(246,239,227,0.82); max-width:42ch;}
 .hero-actions{display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;}
-.btn{display:inline-flex; align-items:center; gap:8px; padding:14px 24px; border-radius:999px; font-weight:600; font-size:14.5px; border:1px solid transparent; cursor:pointer; transition:transform .15s, background .15s;}
+.btn{display:inline-flex; align-items:center; gap:8px; padding:15px 26px; border-radius:999px; font-weight:700; font-size:13px; letter-spacing:.05em; text-transform:uppercase; border:1px solid transparent; cursor:pointer; transition:transform .15s, background .15s;}
 .btn:hover{transform:translateY(-1px);}
 .btn-gold{background:var(--gold); color:var(--wine-dark);}
 .btn-outline{border-color:rgba(246,239,227,0.5); color:var(--cream);}
-.hero-stats{display:flex; gap:28px; margin-top:44px; flex-wrap:wrap;}
+.hero-stats{display:flex; gap:28px; margin-top:40px; flex-wrap:wrap;}
 .hero-stats div{border-left:2px solid var(--gold); padding-left:12px;}
 .hero-stats b{display:block; font-family:'Fraunces',serif; font-size:22px; color:#fff;}
 .hero-stats span{font-size:12.5px; color:rgba(246,239,227,0.75);}
-.hero-card{background:rgba(246,239,227,0.42); backdrop-filter:blur(22px) saturate(1.4); -webkit-backdrop-filter:blur(22px) saturate(1.4); color:var(--charcoal); border-radius:20px; padding:26px; box-shadow:0 30px 60px rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.45); position:relative;}
-.hero-card h3{font-size:19px; margin-bottom:4px;}
-.hero-card p.sub{font-size:13px; color:#6b5f57; margin-bottom:18px;}
-.candle-row{display:flex; gap:10px; margin-bottom:16px;}
-.flame{width:10px; height:14px; border-radius:50% 50% 50% 50%/60% 60% 40% 40%; background:linear-gradient(180deg,#ffd873,var(--gold)); animation:flicker 2.4s ease-in-out infinite; transform-origin:bottom center;}
-.flame:nth-child(2){animation-delay:.4s;}
-.flame:nth-child(3){animation-delay:.9s;}
-.flame:nth-child(4){animation-delay:1.3s;}
-.flame:nth-child(5){animation-delay:.2s;}
-@keyframes flicker{0%,100%{transform:scale(1) rotate(0deg);} 30%{transform:scale(1.08,0.94) rotate(-2deg);} 60%{transform:scale(0.94,1.06) rotate(2deg);}}
-.mini-row{display:flex; justify-content:space-between; font-size:13.5px; padding:9px 0; border-top:1px solid var(--line);}
-.mini-row b{font-weight:600;}
-@media (prefers-reduced-motion: reduce){ .flame{animation:none;} }
+
+/* VISUEL 3D — objet flottant type "product shot" + reflet */
+.hero-visual{position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:420px; z-index:2;}
+.hero-object{position:relative; width:min(300px, 66%); aspect-ratio:3/4; z-index:1; filter:drop-shadow(0 24px 28px rgba(6,10,24,0.55)); transform:rotate(-3deg); transition:transform .4s cubic-bezier(.2,.8,.3,1), opacity .45s ease; opacity:1; transform-style:preserve-3d; will-change:transform;}
+.hero-object.fade{opacity:0; transform:rotate(-3deg) scale(.94);}
+.hero-reflection{width:min(300px, 66%); aspect-ratio:3/4; margin-top:-6px; transform:scaleY(-1) rotate(3deg); opacity:.28; filter:blur(2px); z-index:1; transition:opacity .45s ease;
+  -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,.55), transparent 65%); mask-image:linear-gradient(to bottom, rgba(0,0,0,.55), transparent 65%);}
+.hero-reflection.fade{opacity:0;}
+.hero-object img, .hero-reflection img{width:100%; height:100%; object-fit:contain; display:block; user-select:none; -webkit-user-drag:none;}
+@media (prefers-reduced-motion: reduce){ .hero-object{transition:none;} .hero-bg, .hero-bg img.active{animation:none; transition:none;} }
+
+/* Bande basse du hero — équivalent "articles en vedette" */
+.hero-foot{margin-top:56px; padding-top:22px; border-top:1px solid rgba(246,239,227,0.16); position:relative; z-index:2;}
+.hero-foot-label{font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:rgba(246,239,227,0.55); font-weight:600; margin-bottom:16px;}
+.hero-foot-row{display:flex; gap:36px; flex-wrap:wrap;}
+.hero-foot-item{display:flex; align-items:center; gap:12px;}
+.hf-dot{width:38px; height:38px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; box-shadow:inset 0 -3px 6px rgba(0,0,0,0.25), 0 6px 14px rgba(0,0,0,0.3);}
+.hf-dot::after{content:""; position:absolute; inset:5px; border-radius:50%; background:linear-gradient(160deg, rgba(255,255,255,.55), transparent 55%);}
+.hf-gold{background:radial-gradient(circle at 35% 30%, #f3d99a, var(--gold) 60%, #8a6524 100%);}
+.hf-wine{background:radial-gradient(circle at 35% 30%, #c96f86, var(--wine) 60%, var(--wine-dark) 100%);}
+.hf-sage{background:radial-gradient(circle at 35% 30%, #b0bda3, var(--sage) 60%, #566149 100%);}
+.hero-foot-item b{display:block; font-family:'Fraunces',serif; font-size:16px; color:#fff; font-weight:600;}
+.hero-foot-item span{font-size:12px; color:rgba(246,239,227,0.65);}
+@media (max-width:900px){ .hero-foot-row{gap:24px;} }
 
 /* SECTION SHELL */
 section{padding:84px 0;}
@@ -312,9 +327,50 @@ footer .brand-text, footer .brand-text span{color:#fff;}
 footer .brand-text span{color:var(--gold);}
 .foot-bottom{margin-top:44px; padding-top:22px; border-top:1px solid rgba(246,239,227,0.12); font-size:12.5px; display:flex; justify-content:space-between; color:rgba(246,239,227,0.5);}
 
+/* ===== EFFETS 3D GLOBAUX =====
+   Relief (brillance + ombre portée) sur les cartes et boutons, inclinaison
+   au survol pilotée par JS, et apparition en volume au défilement.
+   Tout est désactivé si l'utilisateur préfère moins de mouvement. */
+.action-card, .article-card, .groupe-card, .gallery-item, .info-panel, .donate-side, .hero-foot-item,
+.btn, .nav-cta, .submit-btn, .amt-btn, .freq-btn{
+  position:relative; transition:transform .35s cubic-bezier(.2,.7,.3,1), box-shadow .35s ease;
+  transform-style:preserve-3d;
+}
+.action-card::before, .article-card::before, .groupe-card::before, .gallery-item::before,
+.info-panel::before, .donate-side::before,
+.btn::before, .nav-cta::before, .submit-btn::before, .amt-btn::before, .freq-btn::before{
+  content:""; position:absolute; inset:0; z-index:2; pointer-events:none; border-radius:inherit;
+  background:linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 32%);
+  opacity:.9; mix-blend-mode:overlay;
+}
+.action-card, .info-panel, .donate-side{overflow:hidden;}
+.article-card:hover, .groupe-card:hover{ box-shadow:0 28px 50px rgba(20,15,10,0.22); }
+.gallery-item:hover{ box-shadow:0 24px 44px rgba(0,0,0,0.4); }
+.action-card:hover, .info-panel:hover, .donate-side:hover, .hero-foot-item:hover{ box-shadow:0 26px 46px rgba(10,16,32,0.35); }
+.hero-foot-item{border-radius:14px; padding:6px;}
+.btn-gold, .nav-cta, .submit-btn{ box-shadow:0 10px 22px rgba(199,154,60,0.28), inset 0 1px 0 rgba(255,255,255,0.35); }
+.btn-gold:hover, .nav-cta:hover, .submit-btn:hover{ box-shadow:0 16px 30px rgba(199,154,60,0.4), inset 0 1px 0 rgba(255,255,255,0.4); }
+
+/* Apparition en volume au scroll */
+.reveal-3d{
+  opacity:0; transform:perspective(1000px) rotateX(16deg) translateY(38px) translateZ(-30px);
+  transition:opacity .8s ease, transform .8s cubic-bezier(.16,.84,.44,1);
+  transform-origin:center bottom; will-change:transform, opacity;
+}
+.reveal-3d.in-view{ opacity:1; transform:perspective(1000px) rotateX(0) translateY(0) translateZ(0); }
+
+@media (prefers-reduced-motion: reduce){
+  .action-card, .article-card, .groupe-card, .gallery-item, .info-panel, .donate-side, .hero-foot-item,
+  .btn, .nav-cta, .submit-btn, .amt-btn, .freq-btn{ transition:none; }
+  .reveal-3d{ opacity:1; transform:none; transition:none; }
+}
+
 @media (max-width:900px){
   .navlinks{display:none;}
   .hero-grid{grid-template-columns:1fr;}
+  .hero-visual{min-height:280px; margin-top:12px;}
+  .hero-object{width:44vw; max-width:220px;}
+  .hero-reflection{width:44vw; max-width:220px;}
   .split{grid-template-columns:1fr;}
   .foot-grid{grid-template-columns:1fr 1fr;}
   .articles-grid{grid-template-columns:1fr;}
@@ -348,32 +404,46 @@ footer .brand-text span{color:var(--gold);}
 <section class="hero" id="accueil">
   <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
   <div class="hero-overlay" aria-hidden="true"></div>
-  <div class="wrap hero-grid">
-    <div>
-      <div class="liturgie-badge" id="liturgieBadge"><span class="dot"></span><span id="liturgieBadgeText">Temps ordinaire</span></div>
-      <div class="eyebrow">Bienvenue chez vous</div>
-      <h1 id="heroTitre">Vivez votre foi, <em id="heroTitreAccent">où que vous soyez</em></h1>
-      <p class="lead" id="heroTexte">Informations paroissiales, demandes de messe et cotisation en ligne : la Quasi-Paroisse Sainte Famille de Nazareth reste proche de vous, même à distance.</p>
-      <div class="hero-actions">
-        <a href="#messes" class="btn btn-gold">Demander une messe</a>
-        <a href="#dons" class="btn btn-outline">Faire un don</a>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="liturgie-badge" id="liturgieBadge"><span class="dot"></span><span id="liturgieBadgeText">Temps ordinaire</span></div>
+        <div class="eyebrow">Bienvenue chez vous</div>
+        <h1 id="heroTitre">Vivez votre foi, <em id="heroTitreAccent">où que vous soyez</em></h1>
+        <p class="lead" id="heroTexte">Informations paroissiales, demandes de messe et cotisation en ligne : la Quasi-Paroisse Sainte Famille de Nazareth reste proche de vous, même à distance.</p>
+        <div class="hero-actions">
+          <a href="#messes" class="btn btn-gold">Demander une messe</a>
+          <a href="#dons" class="btn btn-outline">Faire un don</a>
+        </div>
+        <div class="hero-stats" id="heroStats">
+          <div><b>3</b><span>Messes chaque semaine</span></div>
+          <div><b>12</b><span>Groupes &amp; mouvements</span></div>
+          <div><b>1948</b><span>Année de fondation</span></div>
+        </div>
       </div>
-      <div class="hero-stats" id="heroStats">
-        <div><b>3</b><span>Messes chaque semaine</span></div>
-        <div><b>12</b><span>Groupes &amp; mouvements</span></div>
-        <div><b>1948</b><span>Année de fondation</span></div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-object" id="heroObject"></div>
+        <div class="hero-reflection" id="heroReflection"></div>
       </div>
     </div>
 
-    <div class="hero-card">
-      <h3>Cierge du jour</h3>
-      <p class="sub">Une intention allumée pour la communauté</p>
-      <div class="candle-row">
-        <div class="flame"></div><div class="flame"></div><div class="flame"></div><div class="flame"></div><div class="flame"></div>
+    <div class="hero-foot">
+      <div class="hero-foot-label">Cierge du jour — une intention allumée pour la communauté</div>
+      <div class="hero-foot-row">
+        <div class="hero-foot-item">
+          <span class="hf-dot hf-gold"></span>
+          <div><b id="ciergeMesse">10h00</b><span>Messe du dimanche</span></div>
+        </div>
+        <div class="hero-foot-item">
+          <span class="hf-dot hf-wine"></span>
+          <div><b id="ciergeConfessions">Sam. 16h–17h30</b><span>Confessions</span></div>
+        </div>
+        <div class="hero-foot-item">
+          <span class="hf-dot hf-sage"></span>
+          <div><b id="ciergePermanence">Lun–Ven 9h–12h</b><span>Permanence secrétariat</span></div>
+        </div>
       </div>
-      <div class="mini-row"><span>Messe du dimanche</span><b id="ciergeMesse">10h00</b></div>
-      <div class="mini-row"><span>Confessions</span><b id="ciergeConfessions">Sam. 16h–17h30</b></div>
-      <div class="mini-row"><span>Permanence secrétariat</span><b id="ciergePermanence">Lun–Ven 9h–12h</b></div>
     </div>
   </div>
 </section>
@@ -1251,6 +1321,7 @@ async function loadArticles() {
         </div>
       </div>
     `).join('');
+    if (window.reveal3dScan) window.reveal3dScan();
   } catch (err) {
     grid.innerHTML = '<p class="empty-note">Impossible de charger les articles pour le moment.</p>';
   }
@@ -1292,6 +1363,7 @@ async function loadGroupes() {
         </div>
       </div>
     `).join('');
+    if (window.reveal3dScan) window.reveal3dScan();
   } catch (err) {
     grid.innerHTML = '<p class="empty-note">Impossible de charger les groupes pour le moment.</p>';
   }
@@ -1346,6 +1418,7 @@ async function loadGalerie() {
     grid.querySelectorAll('.gallery-item').forEach(item => {
       item.addEventListener('click', () => openLightbox(item.dataset.url, item.dataset.legende));
     });
+    if (window.reveal3dScan) window.reveal3dScan();
   } catch (err) {
     grid.innerHTML = '<p class="empty-note">Impossible de charger les photos pour le moment.</p>';
   }
@@ -1403,6 +1476,113 @@ if (lightbox) {
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 }
+
+// ============ Effets 3D globaux (inclinaison au survol + apparition en volume) ============
+(function () {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const TILT_SELECTOR = '.action-card, .article-card, .groupe-card, .gallery-item, .info-panel, .donate-side, .hero-foot-item';
+  const REVEAL_SELECTOR = '.section-head, .action-card, .schedule-row, .info-panel, .form-card, .donate-side, .impact-row, .article-card, .groupe-card, .gallery-item, .hero-foot-item';
+
+  // --- Parallax 3D du hero (fond photo/dégradé + croix), au survol de la souris ---
+  const heroSection = document.querySelector('.hero');
+  const heroBgEl = document.getElementById('heroBg');
+  const heroObjectEl = document.querySelector('.hero-object');
+  if (heroSection && !reduceMotion && window.matchMedia('(hover: hover)').matches) {
+    heroSection.addEventListener('mousemove', (e) => {
+      const r = heroSection.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      if (heroBgEl) heroBgEl.style.transform = `perspective(1600px) rotateX(${(py * -3).toFixed(2)}deg) rotateY(${(px * 4).toFixed(2)}deg) scale(1.06)`;
+      if (heroObjectEl) heroObjectEl.style.transform = `perspective(900px) rotateX(${(py * -14).toFixed(2)}deg) rotateY(${(px * 16 - 4).toFixed(2)}deg) translateZ(10px)`;
+    });
+    heroSection.addEventListener('mouseleave', () => {
+      if (heroBgEl) heroBgEl.style.transform = '';
+      if (heroObjectEl) heroObjectEl.style.transform = '';
+    });
+  }
+
+  // --- Icônes du hero : vos images détourées (sans fond) ---
+  const heroReflectionEl = document.querySelector('.hero-reflection');
+  const ICONS_3D = [
+    { src: 'images/hero-icons/marie-enfant-nobg.png' },
+    { src: 'images/hero-icons/marie-silhouette-nobg.png' },
+    { src: 'images/hero-icons/chapelet-nobg.png' }
+  ];
+  function buildIconSvg(icon) {
+    return `<img src="${icon.src}" alt="" draggable="false">`;
+  }
+  let iconIdx = 0;
+  function renderIcon() {
+    if (!heroObjectEl || !heroReflectionEl) return;
+    const svg = buildIconSvg(ICONS_3D[iconIdx % ICONS_3D.length]);
+    heroObjectEl.innerHTML = svg;
+    heroReflectionEl.innerHTML = svg;
+  }
+  renderIcon();
+  if (heroObjectEl && heroReflectionEl && !reduceMotion) {
+    setInterval(() => {
+      heroObjectEl.classList.add('fade');
+      heroReflectionEl.classList.add('fade');
+      setTimeout(() => {
+        iconIdx++;
+        renderIcon();
+        heroObjectEl.classList.remove('fade');
+        heroReflectionEl.classList.remove('fade');
+      }, 450);
+    }, 5200);
+  }
+
+  // --- Inclinaison 3D au survol (souris) ---
+  if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+    let current = null;
+    document.addEventListener('mousemove', (e) => {
+      const card = e.target.closest(TILT_SELECTOR);
+      if (current && current !== card) {
+        current.style.transform = '';
+        current = null;
+      }
+      if (!card) return;
+      current = card;
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `perspective(900px) rotateX(${(-py * 9).toFixed(2)}deg) rotateY(${(px * 11).toFixed(2)}deg) translateZ(4px)`;
+    });
+    document.addEventListener('mouseout', (e) => {
+      const card = e.target.closest(TILT_SELECTOR);
+      if (card && (!e.relatedTarget || !card.contains(e.relatedTarget))) {
+        card.style.transform = '';
+        if (current === card) current = null;
+      }
+    });
+  }
+
+  // --- Apparition en volume au défilement ---
+  const io = ('IntersectionObserver' in window && !reduceMotion)
+    ? new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' })
+    : null;
+
+  window.reveal3dScan = function reveal3dScan() {
+    document.querySelectorAll(REVEAL_SELECTOR).forEach((el, i) => {
+      if (el.dataset.reveal3d) return;
+      el.dataset.reveal3d = '1';
+      el.classList.add('reveal-3d');
+      el.style.transitionDelay = Math.min(i % 6, 5) * 70 + 'ms';
+      if (io) io.observe(el);
+      else el.classList.add('in-view');
+    });
+  };
+  reveal3dScan();
+})();
+
 
 </script>
 </body>
