@@ -378,6 +378,64 @@ footer .brand-text span{color:var(--gold);}
   .gallery-grid{grid-template-columns:1fr 1fr;}
 }
 
+
+/* ===== ANIMATIONS SUPPLÉMENTAIRES (curseur, particules, ambiance) ===== */
+#scrollBar{position:fixed; top:0; left:0; height:3px; width:100%; transform-origin:0 50%; transform:scaleX(0); background:linear-gradient(90deg,var(--gold),#fff3c9,var(--gold)); z-index:9999; pointer-events:none; box-shadow:0 0 10px rgba(199,154,60,.7);}
+#cursorGlow{position:fixed; left:0; top:0; width:420px; height:420px; margin:-210px 0 0 -210px; border-radius:50%; pointer-events:none; z-index:9990; opacity:0; transition:opacity .4s; background:radial-gradient(circle, rgba(199,154,60,.20) 0%, rgba(199,154,60,.07) 40%, transparent 70%); mix-blend-mode:screen; will-change:transform;}
+#cursorGlow.on{opacity:1;}
+.spark{position:fixed; z-index:9995; pointer-events:none; width:var(--s,10px); height:var(--s,10px); margin:calc(var(--s,10px) / -2) 0 0 calc(var(--s,10px) / -2); background:radial-gradient(circle, #fff 0%, var(--gold) 45%, transparent 70%); clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%); animation:sparkFall var(--d,900ms) ease-out forwards;}
+@keyframes sparkFall{0%{opacity:1; transform:translate(0,0) rotate(0) scale(1);} 100%{opacity:0; transform:translate(var(--dx,0px), var(--dy,40px)) rotate(180deg) scale(.1);}}
+.ripple{position:fixed; z-index:9996; pointer-events:none; width:20px; height:20px; margin:-10px 0 0 -10px; border-radius:50%; border:2px solid var(--gold); animation:rippleOut .8s ease-out forwards;}
+@keyframes rippleOut{to{transform:scale(9); opacity:0; border-width:.5px;}}
+.dust{position:absolute; bottom:-20px; border-radius:50%; background:radial-gradient(circle, rgba(255,240,200,.95), rgba(199,154,60,.45) 55%, transparent 70%); pointer-events:none; z-index:1; opacity:0; animation:dustUp var(--dur,12s) linear var(--del,0s) infinite;}
+@keyframes dustUp{0%{opacity:0; transform:translate(0,0) scale(.6);} 12%{opacity:.85;} 50%{transform:translate(var(--sw,30px),-300px) scale(1);} 100%{opacity:0; transform:translate(calc(var(--sw,30px) * -1),-640px) scale(.5);}}
+.hero-object img{animation:floatY 5.5s ease-in-out infinite;}
+@keyframes floatY{0%,100%{transform:translateY(0) rotate(0);} 50%{transform:translateY(-14px) rotate(1.2deg);}}
+.hero-visual::before{content:""; position:absolute; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(255,232,170,.35), transparent 65%); animation:haloPulse 4.5s ease-in-out infinite; z-index:0; pointer-events:none;}
+@keyframes haloPulse{0%,100%{transform:scale(.85); opacity:.55;} 50%{transform:scale(1.15); opacity:1;}}
+.hero h1 em{background:linear-gradient(100deg,var(--gold) 0%,#fff3c9 25%,var(--gold) 50%,#ffe9a8 75%,var(--gold) 100%); background-size:250% 100%; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; animation:goldShine 5s linear infinite;}
+@keyframes goldShine{to{background-position:-250% 0;}}
+.btn-gold, .nav-cta, .submit-btn{overflow:hidden;}
+.btn-gold::after, .nav-cta::after, .submit-btn::after{content:""; position:absolute; top:0; left:-60%; width:40%; height:100%; background:linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); transform:skewX(-20deg); animation:btnShine 4.5s ease-in-out infinite; pointer-events:none;}
+@keyframes btnShine{0%,55%{left:-60%;} 100%{left:130%;}}
+.action-card::after, .article-card::after, .groupe-card::after, .gallery-item::after, .info-panel::after, .donate-side::after, .hero-foot-item::after{content:""; position:absolute; inset:0; z-index:3; pointer-events:none; border-radius:inherit; opacity:0; transition:opacity .3s; background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%), rgba(255,235,180,.28), transparent 60%);}
+.action-card:hover::after, .article-card:hover::after, .groupe-card:hover::after, .gallery-item:hover::after, .info-panel:hover::after, .donate-side:hover::after, .hero-foot-item:hover::after{opacity:1;}
+.navlinks a{position:relative;}
+.navlinks a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:var(--gold); transform:scaleX(0); transform-origin:left; transition:transform .35s cubic-bezier(.2,.8,.3,1);}
+.navlinks a:hover::after{transform:scaleX(1);}
+.section-head h2{background:linear-gradient(90deg,#fff 0%,#fff 40%,var(--gold) 50%,#fff 60%,#fff 100%); background-size:300% 100%; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; animation:goldShine 9s linear infinite;}
+@media (prefers-reduced-motion: reduce){
+  #cursorGlow,.spark,.ripple,.dust{display:none;}
+  .hero-object img,.hero-visual::before,.hero h1 em,.btn-gold::after,.nav-cta::after,.submit-btn::after,.section-head h2{animation:none;}
+}
+
+
+/* ===== PLUS DE 3D : anneaux orbitaux, croix flottantes, profondeur, entrées en volume ===== */
+.hero-visual{perspective:900px;}
+.ring3d{position:absolute; left:50%; top:50%; width:min(400px,88%); aspect-ratio:1; margin:calc(min(400px,88%) / -2) 0 0 calc(min(400px,88%) / -2); border-radius:50%; border:2px solid rgba(199,154,60,.55); box-shadow:0 0 18px rgba(199,154,60,.35), inset 0 0 18px rgba(199,154,60,.25); pointer-events:none; transform-style:preserve-3d;}
+.ring3d.r1{z-index:0; animation:orbitA 14s linear infinite;}
+.ring3d.r2{z-index:3; width:min(340px,76%); margin:calc(min(340px,76%) / -2) 0 0 calc(min(340px,76%) / -2); border-style:dashed; opacity:.65; animation:orbitB 18s linear infinite;}
+@keyframes orbitA{from{transform:rotateX(72deg) rotateZ(0);} to{transform:rotateX(72deg) rotateZ(360deg);}}
+@keyframes orbitB{from{transform:rotateX(64deg) rotateY(-22deg) rotateZ(360deg);} to{transform:rotateX(64deg) rotateY(-22deg) rotateZ(0);}}
+.hero-object img{animation:floatY 5.5s ease-in-out infinite, swayY 9s ease-in-out infinite;}
+@keyframes swayY{0%,100%{rotate:y -16deg;} 50%{rotate:y 16deg;}}
+.cross3d{position:absolute; z-index:1; pointer-events:none; transform-style:preserve-3d; animation:crossSpin var(--dur,10s) linear var(--del,0s) infinite, crossDrift var(--drift,14s) ease-in-out var(--del,0s) infinite alternate;}
+.cross3d i{position:absolute; background:linear-gradient(135deg,#fff3c9,var(--gold) 55%,#8a641b); border-radius:2px; box-shadow:0 0 12px rgba(199,154,60,.6);}
+.cross3d i:first-child{left:38%; width:24%; top:0; height:100%;}
+.cross3d i:last-child{top:26%; height:22%; left:0; width:100%;}
+@keyframes crossSpin{from{transform:perspective(500px) rotateX(18deg) rotateY(0);} to{transform:perspective(500px) rotateX(18deg) rotateY(360deg);}}
+@keyframes crossDrift{from{translate:0 0;} to{translate:24px -46px;}}
+.hero h1, .hero p.lead, .hero-actions, .hero-stats{transition:translate .25s ease-out;}
+.hero-grid{transform-style:preserve-3d; will-change:transform, opacity;}
+.action-card.reveal-3d:nth-child(odd), .article-card.reveal-3d:nth-child(odd), .groupe-card.reveal-3d:nth-child(odd), .gallery-item.reveal-3d:nth-child(odd){transform:perspective(1000px) rotateY(-32deg) translateX(-50px) translateZ(-80px);}
+.action-card.reveal-3d:nth-child(even), .article-card.reveal-3d:nth-child(even), .groupe-card.reveal-3d:nth-child(even), .gallery-item.reveal-3d:nth-child(even){transform:perspective(1000px) rotateY(32deg) translateX(50px) translateZ(-80px);}
+.reveal-3d.in-view, .reveal-3d.in-view:nth-child(n){transform:perspective(1000px) rotateX(0) rotateY(0) translate3d(0,0,0);}
+.article-card:hover h3, .groupe-card:hover h3, .article-card:hover img, .groupe-card:hover img{transform:translateZ(28px);}
+.article-card h3, .groupe-card h3, .article-card img, .groupe-card img{transition:transform .35s cubic-bezier(.2,.7,.3,1);}
+.btn:hover, .nav-cta:hover, .submit-btn:hover{transform:perspective(500px) translateZ(18px) rotateX(-6deg) scale(1.05);}
+.btn:active, .nav-cta:active, .submit-btn:active{transform:perspective(500px) translateZ(-6px) scale(.96);}
+@media (prefers-reduced-motion: reduce){ .ring3d,.cross3d{display:none;} .hero-object img{animation:none;} }
+
 </style>
 </head>
 <body>
@@ -1547,7 +1605,7 @@ if (lightbox) {
       const r = card.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
       const py = (e.clientY - r.top) / r.height - 0.5;
-      card.style.transform = `perspective(900px) rotateX(${(-py * 9).toFixed(2)}deg) rotateY(${(px * 11).toFixed(2)}deg) translateZ(4px)`;
+      card.style.transform = `perspective(900px) rotateX(${(-py * 15).toFixed(2)}deg) rotateY(${(px * 18).toFixed(2)}deg) translateZ(14px) scale(1.035)`;
     });
     document.addEventListener('mouseout', (e) => {
       const card = e.target.closest(TILT_SELECTOR);
@@ -1583,6 +1641,133 @@ if (lightbox) {
   reveal3dScan();
 })();
 
+
+
+// ============ Animations supplémentaires : curseur lumineux, étincelles, poussière dorée, ondes, barre de progression ============
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const mk = (tag, id) => { const e = document.createElement(tag); if (id) e.id = id; document.body.appendChild(e); return e; };
+
+  // Barre de progression de lecture
+  const bar = mk('div', 'scrollBar');
+  const onScroll = () => {
+    const h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = 'scaleX(' + (h > 0 ? scrollY / h : 0) + ')';
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // Poussière dorée qui monte dans le hero (animation permanente)
+  const hero = document.querySelector('.hero');
+  if (hero) {
+    for (let i = 0; i < 26; i++) {
+      const d = document.createElement('span');
+      d.className = 'dust';
+      const s = 3 + Math.random() * 6;
+      d.style.cssText = `left:${Math.random() * 100}%;width:${s}px;height:${s}px;--dur:${9 + Math.random() * 9}s;--del:${-Math.random() * 14}s;--sw:${(Math.random() * 80 - 40).toFixed(0)}px`;
+      hero.appendChild(d);
+    }
+  }
+
+  // Lueur qui suit le curseur (sur toute la page)
+  const glow = mk('div', 'cursorGlow');
+  let tx = innerWidth / 2, ty = innerHeight / 2, gx = tx, gy = ty, lastSpark = 0;
+  (function loop() {
+    gx += (tx - gx) * 0.14; gy += (ty - gy) * 0.14;
+    glow.style.transform = `translate(${gx}px,${gy}px)`;
+    requestAnimationFrame(loop);
+  })();
+
+  // Étincelles derrière le curseur
+  function spark(x, y) {
+    if (document.querySelectorAll('.spark').length > 40) return;
+    const s = document.createElement('i');
+    s.className = 'spark';
+    s.style.cssText = `left:${x}px;top:${y}px;--s:${6 + Math.random() * 12}px;--dx:${(Math.random() * 60 - 30).toFixed(0)}px;--dy:${(20 + Math.random() * 50).toFixed(0)}px;--d:${700 + Math.random() * 600}ms`;
+    document.body.appendChild(s);
+    s.addEventListener('animationend', () => s.remove());
+  }
+  addEventListener('pointermove', (e) => {
+    tx = e.clientX; ty = e.clientY; glow.classList.add('on');
+    const now = performance.now();
+    if (now - lastSpark > 45) { lastSpark = now; spark(e.clientX, e.clientY); }
+    // Halo qui suit le curseur à l'intérieur des cartes
+    const c = e.target.closest && e.target.closest('.action-card, .article-card, .groupe-card, .gallery-item, .info-panel, .donate-side, .hero-foot-item');
+    if (c) { const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); }
+  }, { passive: true });
+  document.addEventListener('mouseleave', () => glow.classList.remove('on'));
+
+  // Onde dorée au clic / au toucher + gerbe d'étincelles
+  addEventListener('pointerdown', (e) => {
+    const r = document.createElement('div');
+    r.className = 'ripple'; r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px';
+    document.body.appendChild(r);
+    r.addEventListener('animationend', () => r.remove());
+    for (let i = 0; i < 10; i++) spark(e.clientX, e.clientY);
+  });
+
+  // Boutons "magnétiques" : ils se rapprochent du curseur
+  if (matchMedia('(hover: hover)').matches) {
+    document.addEventListener('mousemove', (e) => {
+      document.querySelectorAll('.btn, .nav-cta, .submit-btn').forEach((b) => {
+        const r = b.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+        const near = Math.hypot(dx, dy) < Math.max(r.width, 120);
+        b.style.translate = near ? `${(dx * 0.18).toFixed(1)}px ${(dy * 0.28).toFixed(1)}px` : '';
+      });
+    }, { passive: true });
+  }
+})();
+
+
+// ============ Encore plus de 3D : anneaux, croix flottantes, profondeur de la souris et du scroll ============
+(function () {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+
+  // Anneaux orbitaux autour de l'image de la Vierge
+  const vis = hero.querySelector('.hero-visual');
+  if (vis) ['r1', 'r2'].forEach((c) => { const r = document.createElement('div'); r.className = 'ring3d ' + c; vis.appendChild(r); });
+
+  // Croix dorées 3D qui tournent et flottent
+  for (let i = 0; i < 7; i++) {
+    const c = document.createElement('div');
+    c.className = 'cross3d';
+    const s = 22 + Math.random() * 30;
+    c.style.cssText = `left:${(4 + Math.random() * 90).toFixed(0)}%;top:${(8 + Math.random() * 80).toFixed(0)}%;width:${s * 0.7}px;height:${s}px;--dur:${7 + Math.random() * 8}s;--del:${-Math.random() * 10}s;--drift:${10 + Math.random() * 10}s;opacity:${(0.35 + Math.random() * 0.45).toFixed(2)}`;
+    c.innerHTML = '<i></i><i></i>';
+    hero.appendChild(c);
+  }
+
+  // Profondeur : chaque couche du texte bouge à sa propre vitesse avec la souris
+  const layers = [['h1', 14], ['p.lead', 9], ['.hero-actions', 20], ['.hero-stats', 6]]
+    .map(([sel, k]) => [hero.querySelector(sel), k]).filter((x) => x[0]);
+  const crosses = hero.querySelectorAll('.cross3d');
+  if (matchMedia('(hover: hover)').matches) {
+    hero.addEventListener('mousemove', (e) => {
+      const r = hero.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+      layers.forEach(([el, k]) => { el.style.translate = `${(px * -k).toFixed(1)}px ${(py * -k * 0.6).toFixed(1)}px`; });
+    });
+    hero.addEventListener('mouseleave', () => layers.forEach(([el]) => { el.style.translate = ''; }));
+  }
+
+  // Le hero bascule en 3D et recule quand on défile
+  const grid = hero.querySelector('.hero-grid');
+  let ticking = false;
+  function onScroll() {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => {
+      const p = Math.min(1, Math.max(0, scrollY / (hero.offsetHeight || 1)));
+      if (grid) {
+        grid.style.transform = `perspective(1100px) rotateX(${(p * 14).toFixed(2)}deg) translateY(${(p * -30).toFixed(1)}px) translateZ(${(p * -120).toFixed(0)}px)`;
+        grid.style.opacity = (1 - p * 0.55).toFixed(2);
+      }
+      ticking = false;
+    });
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+})();
 
 </script>
 </body>
