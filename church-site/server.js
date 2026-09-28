@@ -154,6 +154,9 @@ async function initDB() {
     CREATE TABLE IF NOT EXISTS hero_images (
       id TEXT PRIMARY KEY, mimetype TEXT, data BYTEA, created_at TIMESTAMPTZ DEFAULT now()
     );
+    CREATE TABLE IF NOT EXISTS hero_icons (
+      id TEXT PRIMARY KEY, mimetype TEXT, data BYTEA, created_at TIMESTAMPTZ DEFAULT now()
+    );
     CREATE TABLE IF NOT EXISTS galerie (
       id TEXT PRIMARY KEY, mimetype TEXT, data BYTEA, legende TEXT, created_at TIMESTAMPTZ DEFAULT now()
     );
@@ -417,6 +420,46 @@ app.post('/api/admin/hero-images', requireAuth, (req, res) => {
 
 app.delete('/api/admin/hero-images/:id', requireAuth, async (req, res) => {
   const { rowCount } = await pool.query('DELETE FROM hero_images WHERE id = $1', [req.params.id]);
+  if (!rowCount) return res.status(404).json({ error: 'Image introuvable' });
+  res.json({ ok: true });
+});
+
+// =====================================================================
+// IMAGES 3D DU BANDEAU (Vierge, chapelet…) — redimensionnées, transparence conservée
+// =====================================================================
+app.get('/api/hero-icons', async (req, res) => {
+  const { rows } = await pool.query('SELECT id FROM hero_icons ORDER BY created_at ASC');
+  res.json(rows.map(h => ({ id: h.id, url: '/images/hero-icon/' + h.id })));
+});
+
+app.get('/images/hero-icon/:id', async (req, res) => {
+  const { rows } = await pool.query('SELECT mimetype, data FROM hero_icons WHERE id = $1', [req.params.id]);
+  if (!rows.length) return res.status(404).end();
+  res.set('Content-Type', rows[0].mimetype);
+  res.set('Cache-Control', 'public, max-age=31536000, immutable');
+  res.send(rows[0].data);
+});
+
+app.post('/api/admin/hero-icons', requireAuth, (req, res) => {
+  memoryUpload.single('photo')(req, res, async (err) => {
+    if (err) return res.status(400).json({ error: err.message });
+    if (!req.file) return res.status(400).json({ error: 'Aucune image reçue' });
+    try {
+      // Taille maximale identique pour toutes (600x800), sans déformation ; le PNG/WebP transparent reste transparent
+      const buffer = await sharp(req.file.buffer).rotate()
+        .resize({ width: 600, height: 800, fit: 'inside', withoutEnlargement: true })
+        .webp({ quality: 82 }).toBuffer();
+      const id = uid('i');
+      await pool.query('INSERT INTO hero_icons (id, mimetype, data) VALUES ($1, $2, $3)', [id, 'image/webp', buffer]);
+      res.status(201).json({ id, url: '/images/hero-icon/' + id });
+    } catch (e) {
+      res.status(500).json({ error: "Erreur lors du traitement de l'image" });
+    }
+  });
+});
+
+app.delete('/api/admin/hero-icons/:id', requireAuth, async (req, res) => {
+  const { rowCount } = await pool.query('DELETE FROM hero_icons WHERE id = $1', [req.params.id]);
   if (!rowCount) return res.status(404).json({ error: 'Image introuvable' });
   res.json({ ok: true });
 });

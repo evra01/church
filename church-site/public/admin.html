@@ -850,6 +850,18 @@ tbody tr:hover{background:rgba(199,154,60,0.05);}
         <div class="photo-grid" id="heroPhotoGrid" style="margin-top:18px;"></div>
       </div>
 
+      <div class="form-card" style="margin-bottom:28px;">
+        <h3>Images 3D du bandeau (Vierge, chapelet…)</h3>
+        <p class="sub">Elles tournent en 3D à droite du titre, l'une après l'autre. Toutes sont affichées dans le même cadre en arche, de même taille. Idéal : image détourée (PNG sans fond), portrait.</p>
+        <form id="heroIconForm" class="photo-upload-row">
+          <input type="file" id="heroIconFile" accept="image/png,image/jpeg,image/webp,image/gif" required>
+          <button class="btn-primary" type="submit" id="heroIconBtn">Ajouter l'image</button>
+        </form>
+        <div class="error-msg" id="heroIconError"></div>
+        <div class="photo-grid" id="heroIconGrid" style="margin-top:18px;"></div>
+        <p class="sub" style="margin-top:10px;">Tant qu'aucune image n'est ajoutée ici, les 3 images par défaut du site sont utilisées.</p>
+      </div>
+
       <div class="form-card">
         <h3>Photos des célébrations (galerie du site)</h3>
         <p class="sub">Affichées dans la section « Célébrations » visible par tous les visiteurs.</p>
@@ -979,7 +991,7 @@ document.querySelectorAll('.side-nav button').forEach(btn => {
 
 // ============ Chargement des données ============
 async function loadEverything() {
-  await Promise.all([loadStats(), loadMesses(), loadDons(), loadArticles(), loadCitations(), loadGroupes(), loadSiteSettings(), loadHeroPhotosAdmin(), loadGaleriePhotosAdmin()]);
+  await Promise.all([loadStats(), loadMesses(), loadDons(), loadArticles(), loadCitations(), loadGroupes(), loadSiteSettings(), loadHeroPhotosAdmin(), loadHeroIconsAdmin(), loadGaleriePhotosAdmin()]);
 }
 
 async function loadStats() {
@@ -1864,6 +1876,55 @@ document.getElementById('heroPhotoForm').addEventListener('submit', async (e) =>
   } finally {
     btn.disabled = false;
     btn.textContent = 'Ajouter la photo';
+  }
+});
+
+// ============ Images 3D du bandeau ============
+async function loadHeroIconsAdmin() {
+  const grid = document.getElementById('heroIconGrid');
+  const icons = await api('/api/hero-icons');
+  if (!icons.length) {
+    grid.innerHTML = '<p class="empty-note">Aucune image ajoutée : les images par défaut sont utilisées.</p>';
+    return;
+  }
+  grid.innerHTML = icons.map(p => `
+    <div class="photo-card">
+      <img src="${p.url}" alt="Image 3D" style="object-fit:contain;background:#1B3660;">
+      <button class="icon-btn" data-del-icon="${p.id}">Supprimer</button>
+    </div>
+  `).join('');
+  grid.querySelectorAll('[data-del-icon]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Supprimer cette image 3D ?')) return;
+      await api(`/api/admin/hero-icons/${btn.dataset.delIcon}`, { method: 'DELETE' });
+      toast('Image supprimée');
+      loadHeroIconsAdmin();
+    });
+  });
+}
+
+document.getElementById('heroIconForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fileInput = document.getElementById('heroIconFile');
+  const btn = document.getElementById('heroIconBtn');
+  const err = document.getElementById('heroIconError');
+  err.classList.remove('show');
+  if (!fileInput.files[0]) return;
+  const formData = new FormData();
+  formData.append('photo', fileInput.files[0]);
+  btn.disabled = true; btn.textContent = 'Envoi…';
+  try {
+    const res = await fetch('/api/admin/hero-icons', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Une erreur est survenue');
+    document.getElementById('heroIconForm').reset();
+    toast('Image 3D ajoutée');
+    loadHeroIconsAdmin();
+  } catch (e) {
+    err.textContent = '✕ ' + e.message;
+    err.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.textContent = "Ajouter l'image";
   }
 });
 
