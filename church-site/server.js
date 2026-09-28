@@ -56,6 +56,8 @@ const DEFAULT_SETTINGS = {
   nomParoisse: 'Sainte Famille de Nazareth',
   sousTitre: 'Paris Village · Bingerville',
   heroTitre: 'Vivez votre foi,',
+  heroDelaiFond: 6,
+  heroDelaiIcones: 5,
   heroTitreAccent: 'où que vous soyez',
   heroTexte: "Informations paroissiales, demandes de messe et cotisation en ligne : la Quasi-Paroisse Sainte Famille de Nazareth reste proche de vous, même à distance.",
   stats: [
@@ -292,6 +294,10 @@ app.put('/api/admin/settings', requireAuth, async (req, res) => {
   if (typeof body.heroTitre === 'string') s.heroTitre = body.heroTitre;
   if (typeof body.heroTitreAccent === 'string') s.heroTitreAccent = body.heroTitreAccent;
   if (typeof body.heroTexte === 'string') s.heroTexte = body.heroTexte;
+  // Temps de passage des images (en secondes, entre 2 et 60)
+  const clampSec = (v) => Math.min(60, Math.max(2, Number(v)));
+  if (body.heroDelaiFond !== undefined && !isNaN(Number(body.heroDelaiFond))) s.heroDelaiFond = clampSec(body.heroDelaiFond);
+  if (body.heroDelaiIcones !== undefined && !isNaN(Number(body.heroDelaiIcones))) s.heroDelaiIcones = clampSec(body.heroDelaiIcones);
   if (typeof body.footerTagline === 'string') s.footerTagline = body.footerTagline;
   if (typeof body.copyright === 'string') s.copyright = body.copyright;
 

@@ -752,7 +752,11 @@ async function loadSettings() {
   }
 }
 
+// Temps de passage des images (réglables dans l'admin), en millisecondes
+window.heroDelays = { fond: 6000, icones: 5000 };
 function applySettings(s) {
+  if (s.heroDelaiFond) window.heroDelays.fond = Math.max(2, Number(s.heroDelaiFond)) * 1000;
+  if (s.heroDelaiIcones) window.heroDelays.icones = Math.max(2, Number(s.heroDelaiIcones)) * 1000;
   // Marque (nav + footer)
   setText('navNom', s.nomParoisse);
   setText('navSousTitre', s.sousTitre);
@@ -1456,11 +1460,13 @@ async function loadHeroImages() {
     if (images.length > 1) {
       const imgEls = heroBg.querySelectorAll('img');
       let current = 0;
-      setInterval(() => {
+      const nextBg = () => {
         imgEls[current].classList.remove('active');
         current = (current + 1) % imgEls.length;
         imgEls[current].classList.add('active');
-      }, 6000);
+        setTimeout(nextBg, window.heroDelays.fond);
+      };
+      setTimeout(nextBg, window.heroDelays.fond);
     }
   } catch (err) {
     // le fond dégradé habituel reste affiché si l'API échoue
@@ -1596,7 +1602,7 @@ if (lightbox) {
     if (Array.isArray(list) && list.length) { ICONS_3D = list.map(i => ({ src: i.url })); iconIdx = 0; renderIcon(); }
   }).catch(() => {});
   if (heroObjectEl && heroReflectionEl && !reduceMotion) {
-    setInterval(() => {
+    const nextIcon = () => {
       heroObjectEl.classList.add('fade');
       heroReflectionEl.classList.add('fade');
       setTimeout(() => {
@@ -1605,7 +1611,9 @@ if (lightbox) {
         heroObjectEl.classList.remove('fade');
         heroReflectionEl.classList.remove('fade');
       }, 450);
-    }, 5200);
+      setTimeout(nextIcon, window.heroDelays.icones);
+    };
+    setTimeout(nextIcon, window.heroDelays.icones);
   }
 
   // --- Inclinaison 3D au survol (souris) ---

@@ -541,6 +541,10 @@ tbody tr:hover{background:rgba(199,154,60,0.05);}
           <div class="field"><label for="sHeroTitreAccent">Titre (fin, en accent doré)</label><input id="sHeroTitreAccent" placeholder="Ex : où que vous soyez"></div>
         </div>
         <div class="field"><label for="sHeroTexte">Texte d'introduction</label><textarea id="sHeroTexte"></textarea></div>
+        <div class="row-2">
+          <div class="field"><label for="sDelaiFond">Temps entre deux photos de fond (secondes)</label><input id="sDelaiFond" type="number" min="2" max="60" step="0.5" placeholder="6"></div>
+          <div class="field"><label for="sDelaiIcones">Temps entre deux images 3D (secondes)</label><input id="sDelaiIcones" type="number" min="2" max="60" step="0.5" placeholder="5"></div>
+        </div>
       </div>
 
       <div class="form-card" style="margin-bottom:20px;">
@@ -1488,6 +1492,8 @@ async function loadSiteSettings() {
   document.getElementById('sHeroTitre').value = s.heroTitre || '';
   document.getElementById('sHeroTitreAccent').value = s.heroTitreAccent || '';
   document.getElementById('sHeroTexte').value = s.heroTexte || '';
+  document.getElementById('sDelaiFond').value = s.heroDelaiFond || 6;
+  document.getElementById('sDelaiIcones').value = s.heroDelaiIcones || 5;
 
   document.getElementById('sCiergeMesse').value = (s.cierge && s.cierge.messeDimanche) || '';
   document.getElementById('sCiergeConfessions').value = (s.cierge && s.cierge.confessions) || '';
@@ -1732,6 +1738,8 @@ document.getElementById('saveSiteBtn').addEventListener('click', async () => {
     heroTitre: document.getElementById('sHeroTitre').value,
     heroTitreAccent: document.getElementById('sHeroTitreAccent').value,
     heroTexte: document.getElementById('sHeroTexte').value,
+    heroDelaiFond: document.getElementById('sDelaiFond').value,
+    heroDelaiIcones: document.getElementById('sDelaiIcones').value,
     stats: statsData.filter(s => s.chiffre.trim() || s.label.trim()),
     cierge: {
       messeDimanche: document.getElementById('sCiergeMesse').value,
