@@ -496,6 +496,7 @@ tbody tr:hover{background:rgba(199,154,60,0.05);}
       <button data-panel="dons">♥ Dons &amp; cotisations</button>
       <button data-panel="articles">✎ Articles</button>
       <button data-panel="citations">🕊 Citations liturgiques</button>
+      <button data-panel="painvie">✨ Pain de vie</button>
       <button data-panel="groupes">👥 Groupes de service</button>
       <button data-panel="photos">🖼 Photos</button>
       <button data-panel="settings">⚙ Paramètres</button>
@@ -799,6 +800,34 @@ tbody tr:hover{background:rgba(199,154,60,0.05);}
       <div class="article-row-list" id="citationsList"></div>
     </section>
 
+    <!-- PAIN DE VIE -->
+    <section class="panel" id="panel-painvie">
+      <div class="main-head">
+        <div><h2>Pain de vie</h2><p>Courtes paroles ou méditations qui nourrissent la foi, découvertes une à une par les visiteurs sur la page d'accueil</p></div>
+      </div>
+      <div class="article-admin-head">
+        <span></span>
+        <button class="btn-primary" id="newPvBtn">+ Nouveau pain de vie</button>
+      </div>
+
+      <div class="article-editor" id="pvEditor">
+        <h3 id="pvEditorTitle">Nouveau pain de vie</h3>
+        <input type="hidden" id="pvId">
+        <div class="field"><label for="pvTitre">Titre (facultatif)</label><input id="pvTitre" maxlength="80" placeholder="Ex : Accueillir l'autre"></div>
+        <div class="field"><label for="pvTexte">Texte</label><textarea id="pvTexte" style="min-height:110px;" maxlength="600" placeholder="Une ou deux phrases pour nourrir la foi, à méditer cette semaine…"></textarea></div>
+        <div class="field"><label for="pvAuteur">Auteur / source (facultatif)</label><input id="pvAuteur" maxlength="80" placeholder="Ex : Père Jean — ou — Groupe des jeunes"></div>
+        <div class="field">
+          <label><input type="checkbox" id="pvPublie" checked style="width:auto; margin-right:8px;">Publié sur le site</label>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-primary" id="savePvBtn">Enregistrer</button>
+          <button class="btn-secondary" id="cancelPvBtn">Annuler</button>
+        </div>
+      </div>
+
+      <div class="article-row-list" id="pvList"></div>
+    </section>
+
     <!-- GROUPES DE SERVICE -->
     <section class="panel" id="panel-groupes">
       <div class="main-head">
@@ -856,7 +885,7 @@ tbody tr:hover{background:rgba(199,154,60,0.05);}
 
       <div class="form-card" style="margin-bottom:28px;">
         <h3>Images 3D du bandeau (Vierge, chapelet…)</h3>
-        <p class="sub">Elles tournent en 3D à droite du titre, l'une après l'autre. Toutes sont affichées dans le même cadre en arche, de même taille. Idéal : image détourée (PNG sans fond), portrait.</p>
+        <p class="sub">Elles tournent en 3D à droite du titre, l'une après l'autre. Toutes sont affichées dans le même cadre en arche, de même taille. Le fond de l'image est supprimé automatiquement à l'ajout (idéal : sujet sur fond uni, en portrait). Une image déjà détourée est conservée telle quelle.</p>
         <form id="heroIconForm" class="photo-upload-row">
           <input type="file" id="heroIconFile" accept="image/png,image/jpeg,image/webp,image/gif" required>
           <button class="btn-primary" type="submit" id="heroIconBtn">Ajouter l'image</button>
@@ -995,7 +1024,7 @@ document.querySelectorAll('.side-nav button').forEach(btn => {
 
 // ============ Chargement des données ============
 async function loadEverything() {
-  await Promise.all([loadStats(), loadMesses(), loadDons(), loadArticles(), loadCitations(), loadGroupes(), loadSiteSettings(), loadHeroPhotosAdmin(), loadHeroIconsAdmin(), loadGaleriePhotosAdmin()]);
+  await Promise.all([loadStats(), loadMesses(), loadDons(), loadArticles(), loadCitations(), loadPainVie(), loadGroupes(), loadSiteSettings(), loadHeroPhotosAdmin(), loadHeroIconsAdmin(), loadGaleriePhotosAdmin()]);
 }
 
 async function loadStats() {
@@ -1342,6 +1371,79 @@ document.getElementById('saveCitationBtn').addEventListener('click', async () =>
     }
     citationEditor.classList.remove('show');
     loadCitations();
+  } catch (e) {
+    toast('Erreur : ' + e.message);
+  }
+});
+
+// ============ Pain de vie ============
+async function loadPainVie() {
+  const items = await api('/api/admin/pain-vie');
+  const list = document.getElementById('pvList');
+  if (!items.length) {
+    list.innerHTML = `<p class="empty-note">Aucun pain de vie. Créez-en un avec le bouton ci-dessus.</p>`;
+    return;
+  }
+  list.innerHTML = items.map(p => `
+    <div class="article-admin-item">
+      <div class="swatch gold"></div>
+      <div class="info">
+        <h4>${escapeHtml(p.titre || (p.texte.length > 70 ? p.texte.slice(0, 70) + '…' : p.texte))}</h4>
+        <div class="meta">${escapeHtml(p.auteur || 'Sans auteur')} · ${formatDate(p.createdAt)}
+          <span class="pill ${p.publie ? 'pub' : 'draft'}" style="margin-left:8px;">${p.publie ? 'Publié' : 'Brouillon'}</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="icon-btn" data-edit-pv="${p.id}">Modifier</button>
+        <button class="icon-btn" data-del-pv="${p.id}">Supprimer</button>
+      </div>
+    </div>
+  `).join('');
+  list.querySelectorAll('[data-edit-pv]').forEach(btn => {
+    btn.addEventListener('click', () => openPvEditor(items.find(p => p.id === btn.dataset.editPv)));
+  });
+  list.querySelectorAll('[data-del-pv]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Supprimer ce pain de vie ?')) return;
+      await api(`/api/admin/pain-vie/${btn.dataset.delPv}`, { method: 'DELETE' });
+      toast('Pain de vie supprimé');
+      loadPainVie();
+    });
+  });
+}
+
+const pvEditor = document.getElementById('pvEditor');
+function openPvEditor(p) {
+  document.getElementById('pvEditorTitle').textContent = p ? 'Modifier le pain de vie' : 'Nouveau pain de vie';
+  document.getElementById('pvId').value = p ? p.id : '';
+  document.getElementById('pvTitre').value = p ? (p.titre || '') : '';
+  document.getElementById('pvTexte').value = p ? p.texte : '';
+  document.getElementById('pvAuteur').value = p ? (p.auteur || '') : '';
+  document.getElementById('pvPublie').checked = p ? p.publie : true;
+  pvEditor.classList.add('show');
+  pvEditor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+document.getElementById('newPvBtn').addEventListener('click', () => openPvEditor(null));
+document.getElementById('cancelPvBtn').addEventListener('click', () => pvEditor.classList.remove('show'));
+document.getElementById('savePvBtn').addEventListener('click', async () => {
+  const id = document.getElementById('pvId').value;
+  const payload = {
+    titre: document.getElementById('pvTitre').value,
+    texte: document.getElementById('pvTexte').value,
+    auteur: document.getElementById('pvAuteur').value,
+    publie: document.getElementById('pvPublie').checked
+  };
+  if (!payload.texte.trim()) { toast('Le texte du pain de vie est obligatoire'); return; }
+  try {
+    if (id) {
+      await api(`/api/admin/pain-vie/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+      toast('Pain de vie mis à jour');
+    } else {
+      await api('/api/admin/pain-vie', { method: 'POST', body: JSON.stringify(payload) });
+      toast('Pain de vie publié');
+    }
+    pvEditor.classList.remove('show');
+    loadPainVie();
   } catch (e) {
     toast('Erreur : ' + e.message);
   }
@@ -1920,7 +2022,7 @@ document.getElementById('heroIconForm').addEventListener('submit', async (e) => 
   if (!fileInput.files[0]) return;
   const formData = new FormData();
   formData.append('photo', fileInput.files[0]);
-  btn.disabled = true; btn.textContent = 'Envoi…';
+  btn.disabled = true; btn.textContent = 'Suppression du fond…';
   try {
     const res = await fetch('/api/admin/hero-icons', { method: 'POST', body: formData });
     const data = await res.json();

@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const multer = require('multer');
 const sharp = require('sharp');
+const { removeBackground } = require('./remove-bg');
 const { Pool } = require('pg');
 
 const app = express();
@@ -151,6 +152,10 @@ async function initDB() {
     );
     CREATE TABLE IF NOT EXISTS citations (
       id TEXT PRIMARY KEY, texte TEXT, reference TEXT, publie BOOLEAN DEFAULT true,
+      created_at TIMESTAMPTZ DEFAULT now()
+    );
+    CREATE TABLE IF NOT EXISTS pain_vie (
+      id TEXT PRIMARY KEY, titre TEXT, texte TEXT, auteur TEXT, publie BOOLEAN DEFAULT true,
       created_at TIMESTAMPTZ DEFAULT now()
     );
     CREATE TABLE IF NOT EXISTS hero_images (
@@ -451,10 +456,16 @@ app.post('/api/admin/hero-icons', requireAuth, (req, res) => {
     if (err) return res.status(400).json({ error: err.message });
     if (!req.file) return res.status(400).json({ error: 'Aucune image reçue' });
     try {
-      // Taille maximale identique pour toutes (600x800), sans déformation ; le PNG/WebP transparent reste transparent
-      const buffer = await sharp(req.file.buffer).rotate()
-        .resize({ width: 600, height: 800, fit: 'inside', withoutEnlargement: true })
-        .webp({ quality: 82 }).toBuffer();
+      // Fond supprimé automatiquement (taille max 600x800, sans déformation) ; une image déjà transparente reste inchangée
+      let buffer;
+      try {
+        buffer = await removeBackground(req.file.buffer);
+      } catch (e) {
+        console.error('Suppression du fond impossible, image conservée telle quelle :', e.message);
+        buffer = await sharp(req.file.buffer).rotate()
+          .resize({ width: 600, height: 800, fit: 'inside', withoutEnlargement: true })
+          .webp({ quality: 82 }).toBuffer();
+      }
       const id = uid('i');
       await pool.query('INSERT INTO hero_icons (id, mimetype, data) VALUES ($1, $2, $3)', [id, 'image/webp', buffer]);
       res.status(201).json({ id, url: '/images/hero-icon/' + id });
@@ -763,6 +774,54 @@ app.put('/api/admin/citations/:id', requireAuth, async (req, res) => {
 app.delete('/api/admin/citations/:id', requireAuth, async (req, res) => {
   const { rowCount } = await pool.query('DELETE FROM citations WHERE id = $1', [req.params.id]);
   if (!rowCount) return res.status(404).json({ error: 'Citation introuvable' });
+  res.json({ ok: true });
+});
+
+// =====================================================================
+// PAIN DE VIE — courtes paroles / méditations découvertes une à une sur l'accueil
+// =====================================================================
+app.get('/api/pain-vie', async (req, res) => {
+  const { rows } = await pool.query('SELECT * FROM pain_vie WHERE publie = true ORDER BY created_at DESC');
+  res.json(withCamelDates(rows));
+});
+
+app.get('/api/admin/pain-vie', requireAuth, async (req, res) => {
+  const { rows } = await pool.query('SELECT * FROM pain_vie ORDER BY created_at DESC');
+  res.json(withCamelDates(rows));
+});
+
+app.post('/api/admin/pain-vie', requireAuth, async (req, res) => {
+  const { titre, texte, auteur, publie } = req.body || {};
+  if (!texte || !String(texte).trim()) return res.status(400).json({ error: 'Le texte du pain de vie est requis' });
+  const id = uid('pv');
+  const { rows } = await pool.query(
+    'INSERT INTO pain_vie (id, titre, texte, auteur, publie) VALUES ($1,$2,$3,$4,$5) RETURNING *',
+    [id, titre || '', String(texte).trim(), auteur || '', publie !== false]
+  );
+  res.status(201).json(withCamelDate(rows[0]));
+});
+
+app.put('/api/admin/pain-vie/:id', requireAuth, async (req, res) => {
+  const { titre, texte, auteur, publie } = req.body || {};
+  const { rows: existing } = await pool.query('SELECT * FROM pain_vie WHERE id = $1', [req.params.id]);
+  if (!existing.length) return res.status(404).json({ error: 'Pain de vie introuvable' });
+  const cur = existing[0];
+  const { rows } = await pool.query(
+    'UPDATE pain_vie SET titre=$1, texte=$2, auteur=$3, publie=$4 WHERE id=$5 RETURNING *',
+    [
+      titre !== undefined ? titre : cur.titre,
+      texte !== undefined ? texte : cur.texte,
+      auteur !== undefined ? auteur : cur.auteur,
+      publie !== undefined ? !!publie : cur.publie,
+      req.params.id
+    ]
+  );
+  res.json(withCamelDate(rows[0]));
+});
+
+app.delete('/api/admin/pain-vie/:id', requireAuth, async (req, res) => {
+  const { rowCount } = await pool.query('DELETE FROM pain_vie WHERE id = $1', [req.params.id]);
+  if (!rowCount) return res.status(404).json({ error: 'Pain de vie introuvable' });
   res.json({ ok: true });
 });
 

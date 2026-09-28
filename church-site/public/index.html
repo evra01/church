@@ -466,9 +466,70 @@ footer .brand-text span{color:var(--gold);}
 .form-card .freq-btn::before, .form-card .freq-btn::after{ content:none !important; display:none !important; }
 .form-card .pay-card, .form-card .pay-card:hover{ transform:none !important; transition:none !important; }
 #cursorGlow.hide{ opacity:0 !important; }
+
+/* ===== FOND DE CHAPELET ANIMÉ (sections sous le hero) ===== */
+#rosaryBg{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;}
+section:not(.hero), footer{position:relative; z-index:1;}
+@supports (background:color-mix(in srgb, red 50%, transparent)){
+  section.light:not(.hero){background:color-mix(in srgb, var(--marian) 62%, transparent);}
+  section.tint:not(.hero), footer{background:color-mix(in srgb, var(--marian-dark) 68%, transparent);}
+}
+
+/* ===== PAIN DE VIE ===== */
+.pdv-band{padding:64px 0; scroll-margin-top:76px;}
+.pdv-wrap{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:48px; align-items:center;}
+.pdv-intro .eyebrow{color:var(--gold);}
+.pdv-intro h2{font-size:clamp(26px,3.2vw,36px); color:#fff;}
+.pdv-intro p{margin-top:12px; color:rgba(246,239,227,0.78); font-size:15.5px; max-width:46ch;}
+.pdv-beads{display:flex; flex-wrap:wrap; gap:7px; margin-top:22px; align-items:center;}
+.pdv-bead{width:14px; height:14px; border-radius:50%; background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.35), rgba(255,255,255,.08) 60%); border:1px solid rgba(246,239,227,.28); transition:background .5s ease, border-color .5s ease, box-shadow .5s ease;}
+.pdv-bead.lit{background:radial-gradient(circle at 35% 30%, #f3d99a, var(--gold) 60%, #8a6524 100%); border-color:transparent; box-shadow:0 0 10px rgba(199,154,60,.55);}
+.pdv-count{margin-top:10px; font-size:12.5px; letter-spacing:.06em; color:rgba(246,239,227,.6);}
+
+.pdv-stage{perspective:1400px;}
+.pdv-card{position:relative; display:grid; min-height:280px; transform-style:preserve-3d; transition:transform .9s cubic-bezier(.2,.8,.25,1);}
+.pdv-card.revealed{transform:rotateY(180deg);}
+.pdv-face{grid-area:1/1; border-radius:20px; padding:32px; -webkit-backface-visibility:hidden; backface-visibility:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;}
+.pdv-front{background:linear-gradient(160deg, rgba(255,255,255,.10), rgba(255,255,255,.03)); border:1px dashed rgba(199,154,60,.55);}
+.pdv-back{transform:rotateY(180deg); background:linear-gradient(160deg, #fffaf0, #f6efe3); color:var(--charcoal); border:1px solid rgba(199,154,60,.7); box-shadow:0 24px 50px rgba(0,0,0,.28), 0 0 0 4px rgba(199,154,60,.12);}
+.pdv-ghost{width:100%; max-width:300px; margin-bottom:22px;}
+.pdv-ghost i{display:block; height:9px; border-radius:6px; background:rgba(246,239,227,.14); margin:10px auto; filter:blur(1.5px);}
+.pdv-ghost i:nth-child(1){width:92%;} .pdv-ghost i:nth-child(2){width:78%;} .pdv-ghost i:nth-child(3){width:60%;}
+
+.pdv-seal{position:relative; width:84px; height:84px; border-radius:50%; border:none; cursor:pointer; color:var(--wine-dark); font-family:'Fraunces',serif; font-size:34px; font-weight:700; background:radial-gradient(circle at 35% 30%, #f7e2a6, var(--gold) 58%, #8a6524 100%); box-shadow:inset 0 -5px 10px rgba(0,0,0,.25), 0 10px 22px rgba(0,0,0,.35); display:flex; align-items:center; justify-content:center;}
+.pdv-seal::before{content:""; position:absolute; inset:-9px; border-radius:50%; border:2px solid rgba(199,154,60,.55); animation:pdvHalo 2.8s ease-in-out infinite;}
+@keyframes pdvHalo{0%,100%{transform:scale(.94); opacity:.35;} 50%{transform:scale(1.12); opacity:.9;}}
+.pdv-seal:focus-visible{outline:3px solid #fff; outline-offset:4px;}
+.pdv-hint{margin-top:18px; font-size:13.5px; color:rgba(246,239,227,.82);}
+.pdv-card.opening .pdv-seal{animation:pdvShake .42s ease-in-out;}
+.pdv-card.opening .pdv-seal::before{animation:none;}
+@keyframes pdvShake{0%,100%{transform:rotate(0) scale(1);} 25%{transform:rotate(-9deg) scale(1.06);} 50%{transform:rotate(8deg) scale(1.12);} 75%{transform:rotate(-5deg) scale(1.08);}}
+
+.pdv-burst{position:absolute; left:50%; top:50%; width:0; height:0; pointer-events:none; z-index:5;}
+.pdv-burst .ring{position:absolute; left:-20px; top:-20px; width:40px; height:40px; border-radius:50%; border:2px solid var(--gold); animation:pdvRing .9s ease-out forwards;}
+.pdv-burst .ray{position:absolute; left:-4px; top:-4px; width:8px; height:8px; border-radius:50%; background:radial-gradient(circle,#fff,var(--gold) 60%,transparent 72%); animation:pdvRay .9s ease-out forwards;}
+@keyframes pdvRing{to{transform:scale(9); opacity:0; border-width:.5px;}}
+@keyframes pdvRay{to{transform:translate(var(--rx),var(--ry)) scale(.2); opacity:0;}}
+
+.pdv-back .pdv-tag{font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--wine); font-weight:700;}
+.pdv-back h3{font-size:22px; margin-top:8px; color:var(--wine-dark);}
+.pdv-text{margin-top:14px; font-family:'Fraunces',serif; font-size:clamp(17px,1.9vw,21px); font-style:italic; line-height:1.5; max-width:38ch;}
+.pdv-text .w{display:inline-block; opacity:0; transform:translateY(8px); filter:blur(3px); animation:pdvWord .6s ease forwards; animation-delay:var(--d,0s);}
+@keyframes pdvWord{to{opacity:1; transform:none; filter:none;}}
+.pdv-author{margin-top:16px; font-size:12.5px; letter-spacing:.08em; text-transform:uppercase; color:#6b5f57; font-weight:600; opacity:0; animation:pdvWord .6s ease forwards; animation-delay:var(--d,1.2s);}
+.pdv-next{margin-top:22px; padding:11px 20px; border-radius:999px; border:1px solid var(--wine); background:transparent; color:var(--wine); font:inherit; font-size:13px; font-weight:700; letter-spacing:.04em; cursor:pointer;}
+.pdv-next:hover{background:var(--wine); color:#fff;}
+.pdv-empty .pdv-seal{opacity:.5; cursor:default;} .pdv-empty .pdv-seal::before{animation:none;}
+@media (max-width:900px){ .pdv-wrap{grid-template-columns:1fr; gap:28px;} }
+@media (prefers-reduced-motion: reduce){
+  .pdv-card{transition:none;} .pdv-seal::before{animation:none;}
+  .pdv-text .w, .pdv-author{animation:none; opacity:1; transform:none; filter:none;}
+  .pdv-burst{display:none;}
+}
 </style>
 </head>
 <body>
+<canvas id="rosaryBg" aria-hidden="true"></canvas>
 
 <header>
   <nav class="wrap">
@@ -540,6 +601,34 @@ footer .brand-text span{color:var(--gold);}
   <div class="wrap">
     <div class="citation-track" id="citationsTrack">
       <p class="empty-note">Chargement…</p>
+    </div>
+  </div>
+</section>
+
+<section class="tint pdv-band" id="pain-de-vie">
+  <div class="wrap pdv-wrap">
+    <div class="pdv-intro">
+      <div class="eyebrow">Pain de vie</div>
+      <h2>Un pain de vie à découvrir</h2>
+      <p>De courtes paroles pour nourrir votre journée, comme un pain que l'on partage. Touchez le sceau pour en découvrir un.</p>
+      <div class="pdv-beads" id="pdvBeads" aria-hidden="true"></div>
+      <div class="pdv-count" id="pdvCount"></div>
+    </div>
+    <div class="pdv-stage">
+      <div class="pdv-card" id="pdvCard">
+        <div class="pdv-face pdv-front">
+          <div class="pdv-ghost" aria-hidden="true"><i></i><i></i><i></i></div>
+          <button type="button" class="pdv-seal" id="pdvSeal" aria-label="Découvrir un pain de vie">✝</button>
+          <p class="pdv-hint" id="pdvHint">Touchez pour découvrir</p>
+        </div>
+        <div class="pdv-face pdv-back" aria-live="polite">
+          <div class="pdv-tag">Pain de vie</div>
+          <h3 id="pdvTitre"></h3>
+          <p class="pdv-text" id="pdvTexte"></p>
+          <div class="pdv-author" id="pdvAuteur"></div>
+          <button type="button" class="pdv-next" id="pdvNext">Découvrir un autre pain de vie</button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -755,7 +844,6 @@ footer .brand-text span{color:var(--gold);}
   </div>
   <div class="wrap foot-bottom">
     <span id="footerCopyright">© 2026 Quasi-Paroisse Sainte Famille de Nazareth — Bingerville</span>
-    <a href="admin.html" style="opacity:.7;">Espace administrateur</a>
   </div>
 </footer>
 
@@ -1816,6 +1904,242 @@ if (lightbox) {
     });
   }
   addEventListener('scroll', onScroll, { passive: true });
+})();
+
+// ============ Pain de vie : découverte animée ============
+(function () {
+  const card = document.getElementById('pdvCard');
+  if (!card) return;
+  const band = document.getElementById('pain-de-vie');
+  const seal = document.getElementById('pdvSeal');
+  const nextBtn = document.getElementById('pdvNext');
+  const elTitre = document.getElementById('pdvTitre');
+  const elTexte = document.getElementById('pdvTexte');
+  const elAuteur = document.getElementById('pdvAuteur');
+  const beadsEl = document.getElementById('pdvBeads');
+  const countEl = document.getElementById('pdvCount');
+  const hintEl = document.getElementById('pdvHint');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let items = [], seen = new Set(), busy = false;
+
+  function renderBeads() {
+    const n = Math.min(items.length, 12);
+    beadsEl.innerHTML = Array.from({ length: n }, (_, i) => `<span class="pdv-bead${i < seen.size ? ' lit' : ''}"></span>`).join('');
+    countEl.textContent = items.length ? `${seen.size} découvert${seen.size > 1 ? 's' : ''} sur ${items.length}` : '';
+  }
+
+  function pickNext() {
+    let pool = items.filter(p => !seen.has(p.id));
+    if (!pool.length) { seen.clear(); pool = items.slice(); }
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function fill(p) {
+    elTitre.textContent = p.titre || '';
+    elTitre.style.display = p.titre ? '' : 'none';
+    const words = String(p.texte).split(/\s+/).filter(Boolean);
+    const step = Math.min(0.06, 1.6 / Math.max(words.length, 1));
+    elTexte.innerHTML = words.map((w, i) => `<span class="w" style="--d:${(0.55 + i * step).toFixed(2)}s">${escapeHtml(w)}</span>`).join(' ');
+    elAuteur.textContent = p.auteur ? '— ' + p.auteur : '';
+    elAuteur.style.setProperty('--d', (0.55 + words.length * step + 0.3).toFixed(2) + 's');
+    seen.add(p.id);
+    renderBeads();
+  }
+
+  function burst() {
+    if (reduce) return;
+    const b = document.createElement('div');
+    b.className = 'pdv-burst';
+    let h = '<i class="ring"></i>';
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2, d = 90 + Math.random() * 60;
+      h += `<i class="ray" style="--rx:${Math.cos(a) * d}px;--ry:${Math.sin(a) * d}px"></i>`;
+    }
+    b.innerHTML = h;
+    card.appendChild(b);
+    setTimeout(() => b.remove(), 1000);
+  }
+
+  function reveal() {
+    if (busy || !items.length) return;
+    busy = true;
+    const p = pickNext();
+    card.classList.add('opening');
+    setTimeout(() => {
+      card.classList.remove('opening');
+      burst();
+      fill(p);
+      card.classList.add('revealed');
+      setTimeout(() => { busy = false; }, reduce ? 0 : 900);
+    }, reduce ? 0 : 420);
+  }
+
+  function another() {
+    if (busy) return;
+    busy = true;
+    card.classList.remove('revealed');            // le sceau se referme…
+    setTimeout(() => { busy = false; reveal(); }, reduce ? 0 : 750);   // …puis se rouvre sur un nouveau pain de vie
+  }
+
+  seal.addEventListener('click', reveal);
+  nextBtn.addEventListener('click', another);
+
+  fetch('/api/pain-vie').then(r => r.ok ? r.json() : []).then(list => {
+    items = Array.isArray(list) ? list : [];
+    if (!items.length) {
+      card.classList.add('pdv-empty');
+      seal.disabled = true;
+      hintEl.textContent = 'Les premiers pains de vie arrivent bientôt.';
+    }
+    renderBeads();
+  }).catch(() => { band.remove(); });
+})();
+
+// ============ Fond animé : chapelets suspendus qui réagissent au curseur ============
+(function () {
+  const cv = document.getElementById('rosaryBg');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouch = matchMedia('(hover: none)').matches;
+  let W = 0, H = 0, dpr = 1, chains = [], last = 0, colGold = '#C79A3C', colWine = '#6E1E32', frame = 0;
+  const px = { x: -999, y: -999, vx: 0, vy: 0, on: false };
+  let scrollDy = 0, lastScroll = scrollY;
+
+  function build() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = W < 700 ? 3 : (W < 1100 ? 4 : 6);
+    const gap = 15;
+    chains = [];
+    for (let c = 0; c < count; c++) {
+      const ax = (c + 0.5) * (W / count) + (Math.sin(c * 12.9) * 0.12) * (W / count);
+      const len = H * (0.5 + 0.32 * ((Math.sin(c * 7.3) + 1) / 2));
+      const n = Math.max(12, Math.floor(len / gap));
+      const nodes = [];
+      for (let i = 0; i < n; i++) {
+        const x = ax, y = 40 + i * gap;
+        nodes.push({ x, y, px: x, py: y });
+      }
+      chains.push({ nodes, gap, ax, ay: 40, phase: c * 1.7 });
+    }
+  }
+
+  function step(dt, t) {
+    const g = 0.42 * dt, damp = 0.985;
+    for (const ch of chains) {
+      const nd = ch.nodes;
+      for (let i = 1; i < nd.length; i++) {
+        const p = nd[i];
+        const vx = (p.x - p.px) * damp, vy = (p.y - p.py) * damp;
+        p.px = p.x; p.py = p.y;
+        const wind = Math.sin(t * 0.0006 + ch.phase + i * 0.08) * 0.05 * (i / nd.length);
+        p.x += vx + wind * dt;
+        p.y += vy + g;
+        // le curseur repousse les perles proches
+        if (px.on) {
+          const dx = p.x - px.x, dy = p.y - px.y, d2 = dx * dx + dy * dy, R = 110;
+          if (d2 < R * R && d2 > 0.01) {
+            const d = Math.sqrt(d2), f = (1 - d / R);
+            p.x += (dx / d) * f * 7 + px.vx * f * 0.35;
+            p.y += (dy / d) * f * 3 + px.vy * f * 0.2;
+          }
+        }
+        // le défilement fait légèrement traîner le chapelet
+        if (scrollDy) p.py += scrollDy * 0.05 * (i / nd.length);
+      }
+      // contraintes de longueur
+      nd[0].x = ch.ax; nd[0].y = ch.ay;
+      for (let k = 0; k < 7; k++) {
+        for (let i = 0; i < nd.length - 1; i++) {
+          const a = nd[i], b = nd[i + 1];
+          const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.0001;
+          const diff = (d - ch.gap) / d;
+          if (i === 0) { b.x -= dx * diff; b.y -= dy * diff; }
+          else { a.x += dx * diff * 0.5; a.y += dy * diff * 0.5; b.x -= dx * diff * 0.5; b.y -= dy * diff * 0.5; }
+        }
+        nd[0].x = ch.ax; nd[0].y = ch.ay;
+      }
+    }
+    scrollDy = 0;
+    px.vx *= 0.8; px.vy *= 0.8;
+  }
+
+  function bead(x, y, r, alpha, wine) {
+    const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.1, x, y, r);
+    if (wine) { g.addColorStop(0, '#e8a3b3'); g.addColorStop(0.55, colWine); g.addColorStop(1, '#2b0a14'); }
+    else { g.addColorStop(0, '#fff1c4'); g.addColorStop(0.5, colGold); g.addColorStop(1, '#6d4d17'); }
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    for (const ch of chains) {
+      const nd = ch.nodes;
+      // fil
+      ctx.globalAlpha = 0.28; ctx.strokeStyle = colGold; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(nd[0].x, nd[0].y);
+      for (let i = 1; i < nd.length; i++) ctx.lineTo(nd[i].x, nd[i].y);
+      ctx.stroke();
+      // perles : une grosse tous les 11
+      for (let i = 1; i < nd.length - 3; i++) {
+        const big = i % 11 === 0;
+        bead(nd[i].x, nd[i].y, big ? 6.5 : 4.2, big ? 0.6 : 0.5, big);
+      }
+      // croix au bout
+      const a = nd[nd.length - 3], b = nd[nd.length - 1];
+      const ang = Math.atan2(b.y - a.y, b.x - a.x) - Math.PI / 2;
+      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(ang);
+      ctx.globalAlpha = 0.65; ctx.fillStyle = colGold;
+      ctx.fillRect(-2.2, 2, 4.4, 30); ctx.fillRect(-9, 10, 18, 4.4);
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function loop(t) {
+    const dt = Math.min(2, (t - last) / 16.67 || 1); last = t;
+    if (!document.hidden) {
+      if (++frame % 120 === 0) {
+        const cs = getComputedStyle(document.documentElement);
+        colGold = cs.getPropertyValue('--gold').trim() || colGold;
+        colWine = getComputedStyle(document.body).getPropertyValue('--wine').trim() || colWine;
+      }
+      step(dt, t); draw();
+    }
+    requestAnimationFrame(loop);
+  }
+
+  const inCalmZone = (e) => !!(e.target && e.target.closest && e.target.closest('.form-card'));
+  addEventListener('pointermove', (e) => {
+    if (inCalmZone(e)) { px.on = false; return; }
+    px.vx = e.clientX - (px.on ? px.x : e.clientX); px.vy = e.clientY - (px.on ? px.y : e.clientY);
+    px.x = e.clientX; px.y = e.clientY; px.on = true;
+  }, { passive: true });
+  addEventListener('pointerleave', () => { px.on = false; });
+  addEventListener('pointerup', () => { if (isTouch) px.on = false; });
+  addEventListener('pointerdown', (e) => {
+    if (inCalmZone(e)) return;
+    // un clic « tire » sur les chapelets proches
+    for (const ch of chains) for (const p of ch.nodes) {
+      const d = Math.hypot(p.x - e.clientX, p.y - e.clientY);
+      if (d < 170) { const f = 1 - d / 170; p.px -= ((p.x - e.clientX) / (d || 1)) * f * 14; p.py -= ((p.y - e.clientY) / (d || 1)) * f * 6; }
+    }
+  }, { passive: true });
+  addEventListener('scroll', () => { scrollDy += scrollY - lastScroll; lastScroll = scrollY; }, { passive: true });
+  addEventListener('resize', build);
+
+  build();
+  if (reduce) {            // mouvement réduit : chapelets fixes, sans simulation
+    for (let i = 0; i < 40; i++) step(1, 0);
+    draw();
+  } else {
+    requestAnimationFrame(loop);
+  }
 })();
 
 </script>
